@@ -4,8 +4,11 @@
 // The video is the owner's upload of a Channel 13 report (src/data/video.config.json). Embedding it is not evidence of republication rights: see docs/FEATURED_VIDEO.md.
 import cfg from '../data/video.config.json';
 import { LINKS } from '../data/site';
+import { u } from '../data/url';
 import Icon from './Icon.astro';
 
+const srcset = (fmt: 'avif' | 'webp') => [640, 1200, 1920].map((w) => `${u(`img/video-front-${w}.${fmt}`)} ${w}w`).join(', ');
+const sizes = '(min-width: 1260px) 1180px, 94vw';
 const media = { id: cfg.id, host: cfg.embedHost, title: cfg.title, watch: cfg.watchUrl };
 if (cfg.watchUrl !== `https://www.youtube.com/watch?v=${cfg.id}` || LINKS.youtube !== cfg.watchUrl) {
   throw new Error('video.config.json and LINKS.youtube must point at the same YouTube video ID');
@@ -25,55 +28,18 @@ if (cfg.watchUrl !== `https://www.youtube.com/watch?v=${cfg.id}` || LINKS.youtub
 
     <div class="vid__stage">
       <button type="button" class="vid__poster" data-video-open aria-haspopup="dialog">
-        <svg class="vid__art" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true" focusable="false">
-          <defs>
-            <radialGradient id="vp-glow" cx="30%" cy="50%" r="70%">
-              <stop offset="0" stop-color="#0474fc" stop-opacity=".5"></stop>
-              <stop offset="1" stop-color="#0474fc" stop-opacity="0"></stop>
-            </radialGradient>
-            <linearGradient id="vp-bg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#142a66"></stop>
-              <stop offset="1" stop-color="#05143f"></stop>
-            </linearGradient>
-            <linearGradient id="vp-cover" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#0474fc"></stop>
-              <stop offset="1" stop-color="#01aefe"></stop>
-            </linearGradient>
-          </defs>
-          <rect width="1280" height="720" fill="url(#vp-bg)"></rect>
-          <rect width="1280" height="720" fill="url(#vp-glow)"></rect>
-          <g stroke="#6fd3ff" stroke-opacity=".22" stroke-width="2">
-            <circle cx="640" cy="360" r="150"></circle>
-            <circle cx="640" cy="360" r="270"></circle>
-            <circle cx="640" cy="360" r="400" stroke-opacity=".12"></circle>
-          </g>
-          <g transform="translate(120 140)">
-            <rect width="400" height="330" rx="24" fill="#142a66" stroke="#b4c3e6" stroke-opacity=".4" stroke-width="2"></rect>
-            <path d="M0 46h400" stroke="#b4c3e6" stroke-opacity=".25" stroke-width="2"></path>
-            <circle cx="30" cy="23" r="6" fill="#b4c3e6" fill-opacity=".5"></circle>
-            <circle cx="52" cy="23" r="6" fill="#b4c3e6" fill-opacity=".5"></circle>
-            <circle cx="200" cy="140" r="52" fill="#3c6fd8"></circle>
-            <path d="M120 330v-40a80 80 0 0 1 160 0v40" fill="#1f3a82"></path>
-            <rect x="34" y="262" width="104" height="36" rx="18" fill="#fd3e4f"></rect>
-            <rect x="150" y="262" width="84" height="36" rx="18" fill="#fd3e4f"></rect>
-            <rect x="246" y="262" width="120" height="36" rx="18" fill="url(#vp-cover)"></rect>
-          </g>
-          <g transform="translate(790 190)">
-            <rect width="360" height="30" rx="15" fill="#e9f0ff" fill-opacity=".92"></rect>
-            <rect y="58" width="300" height="30" rx="15" fill="#e9f0ff" fill-opacity=".6"></rect>
-            <rect y="116" width="330" height="30" rx="15" fill="#e9f0ff" fill-opacity=".92"></rect>
-            <rect y="108" width="330" height="6" rx="3" fill="#fd3e4f" transform="translate(0 46)"></rect>
-          </g>
-        </svg>
+        <picture class="vid__pic" aria-hidden="true">
+          <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
+          <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+          <img src={u('img/video-front-1200.webp')} width="1920" height="1080" alt="" loading="lazy" decoding="async" />
+        </picture>
         <span class="vid__shade" aria-hidden="true"></span>
-        <span class="vid__badge" aria-hidden="true">
-          תחקיר · חדשות 13
-        </span>
         <span class="vid__play" aria-hidden="true">
           <Icon name="play" />
         </span>
-        <span class="vid__bar">
-          <span class="vid__cta">לצפייה בתחקיר המלא</span>
+        <span class="vid__label">לצפייה בתחקיר המלא</span>
+        <span class="sr-only">
+          . סרטון מיוטיוב, נפתח בחלון נגן. תמונת התצוגה לקוחה מהתחקיר: שיחת וידאו של חייל בפנים מטושטשות לצד שתי נשים, ובתחתית כיתוב של חדשות 13.
         </span>
       </button>
     </div>

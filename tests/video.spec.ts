@@ -212,6 +212,104 @@ test.describe('featured report video (YouTube embed, wiring)', () => {
     await context.setOffline(false);
   });
 
+  test('poster: the custom video_front picture is shown before any interaction, sharp, local, under the project base path, and nothing is hidden behind an iframe', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('./');
+    await page.locator('#video').scrollIntoViewIfNeeded();
+    const img = page.locator('.vid__poster img');
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth)).toBeGreaterThan(0);
+    const info = await img.evaluate((el: HTMLImageElement) => ({
+      src: el.currentSrc,
+      alt: el.alt,
+      nw: el.naturalWidth,
+      nh: el.naturalHeight,
+      fit: getComputedStyle(el).objectFit,
+      hiddenPic: el.closest('picture')?.getAttribute('aria-hidden'),
+      rect: JSON.parse(JSON.stringify(el.getBoundingClientRect())),
+      box: JSON.parse(JSON.stringify((el.closest('button') as HTMLElement).getBoundingClientRect())),
+      dpr: devicePixelRatio,
+    }));
+    expect(info.src).toContain(`${BASE}img/video-front-`);
+    expect(info.src).toMatch(/\.(avif|webp)$/);
+    expect(info.fit).toBe('cover');
+    expect(info.alt).toBe('');
+    expect(info.hiddenPic).toBe('true');
+    expect(Math.abs(info.nw / info.nh - 16 / 9), 'the file itself is exactly 16:9').toBeLessThan(0.01);
+    // sharp: the browser picked a file wide enough for the box (naturalWidth is density-corrected for srcset, so read the chosen file's width from its name)
+    const chosen = Number(/video-front-(\d+)\./.exec(info.src)![1]);
+    expect(chosen, `file chosen for a ${Math.round(info.box.width)} px box`).toBeGreaterThanOrEqual(info.box.width >= 700 ? 1200 : 640);
+    // the picture fills the whole poster box
+    expect(Math.abs(info.rect.width - info.box.width)).toBeLessThan(1);
+    expect(Math.abs(info.rect.height - info.box.height)).toBeLessThan(1);
+    expect(await page.locator('iframe').count(), 'no iframe before interaction').toBe(0);
+    for (const f of ['avif', 'webp'])
+      for (const w of [640, 1200, 1920]) expect((await request.get(`${BASE}img/video-front-${w}.${f}`)).status(), `${w}.${f}`).toBe(200);
+  });
+
+  test('poster: a real button named in Hebrew that announces a video launch; blue centred Play disc; visible keyboard focus', async ({ page }) => {
+    await page.goto('./');
+    const btn = page.getByRole('button', { name: /לצפייה בתחקיר המלא/ });
+    await expect(btn).toHaveCount(1);
+    await expect(btn).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(await btn.evaluate((el) => el.tagName)).toBe('BUTTON');
+    const name = await btn.evaluate((el) => (el as HTMLElement).innerText + ' ' + el.textContent);
+    expect(name).toMatch(/סרטון מיוטיוב/);
+    await btn.scrollIntoViewIfNeeded();
+    const m = await page.evaluate(() => {
+      const poster = document.querySelector('.vid__poster')!.getBoundingClientRect();
+      const play = document.querySelector('.vid__play') as HTMLElement;
+      const p = play.getBoundingClientRect();
+      const label = document.querySelector('.vid__label')!.getBoundingClientRect();
+      const cs = getComputedStyle(play);
+      return {
+        dx: p.x + p.width / 2 - (poster.x + poster.width / 2),
+        dy: p.y + p.height / 2 - (poster.y + poster.height / 2),
+        size: p.width,
+        bg: cs.backgroundImage,
+        svgVisible: getComputedStyle(play.querySelector('svg')!).fill,
+        labelInside: label.left >= poster.left && label.right <= poster.right && label.bottom <= poster.bottom,
+        labelBelowPlay: label.top >= p.bottom - 0.5,
+      };
+    });
+    expect(Math.abs(m.dx), 'horizontally centred').toBeLessThan(1.5);
+    expect(Math.abs(m.dy), 'vertically centred').toBeLessThan(1.5);
+    expect(m.size, 'prominent').toBeGreaterThanOrEqual(58);
+    expect(m.bg, 'brand blue (#0474fc to #0a58ca)').toContain('rgb(4, 116, 252)');
+    expect(m.bg).toContain('rgb(10, 88, 202)');
+    expect(m.svgVisible).toBe('rgb(255, 255, 255)');
+    expect(m.labelInside && m.labelBelowPlay, 'the label sits below the disc, inside the picture').toBe(true);
+    await btn.focus();
+    const f = await btn.evaluate((el) => ({
+      style: getComputedStyle(el).outlineStyle,
+      width: parseFloat(getComputedStyle(el).outlineWidth),
+      colour: getComputedStyle(el).outlineColor,
+    }));
+    expect(f.style).not.toBe('none');
+    expect(f.width).toBeGreaterThanOrEqual(3);
+  });
+
+  test('poster: hover gives feedback on desktop (the disc grows, the picture eases in), and Play swaps the poster for the player without leaving the page', async ({
+    page,
+    isMobile,
+  }) => {
+    await mockEmbed(page);
+    await page.goto('./');
+    const poster = page.locator('.vid__poster');
+    await poster.scrollIntoViewIfNeeded();
+    if (!isMobile) {
+      const t0 = await page.locator('.vid__play').evaluate((el) => getComputedStyle(el).transform);
+      await poster.hover();
+      await expect.poll(() => page.locator('.vid__play').evaluate((el) => getComputedStyle(el).transform)).not.toBe(t0);
+    }
+    const url = page.url();
+    await poster.click();
+    await expect(page.locator('#video-dialog iframe')).toBeVisible();
+    expect(page.url()).toBe(url);
+    expect(await page.locator('#video-dialog iframe').evaluate((el: HTMLIFrameElement) => el.src)).toContain(`/embed/${ID}`);
+  });
+
   test('CSP: frame-src allows exactly the privacy-enhanced YouTube host; another YouTube host is refused by the browser; no wildcard anywhere', async ({
     page,
   }) => {
@@ -279,14 +377,17 @@ test.describe('featured report video (YouTube embed, wiring)', () => {
     expect((await axe(page)).violations, 'section, high contrast').toEqual([]);
     // a mistyped selector once silently disabled these overrides, and axe did not notice: assert the computed styles
     const hc = await page.evaluate(() => ({
-      badgeBg: getComputedStyle(document.querySelector('.vid__badge')!).backgroundColor,
-      badgeBorder: getComputedStyle(document.querySelector('.vid__badge')!).borderTopColor,
-      shade: getComputedStyle(document.querySelector('.vid__shade')!).backgroundImage,
+      labelBg: getComputedStyle(document.querySelector('.vid__label')!).backgroundColor,
+      labelBorder: getComputedStyle(document.querySelector('.vid__label')!).borderTopColor,
+      playBg: getComputedStyle(document.querySelector('.vid__play')!).backgroundColor,
+      playBorder: getComputedStyle(document.querySelector('.vid__play')!).borderTopColor,
+      shade: getComputedStyle(document.querySelector('.vid__shade')!).backgroundColor,
     }));
-    expect(hc.badgeBg).toBe('rgb(0, 0, 0)');
-    expect(hc.badgeBorder).toBe('rgb(255, 255, 255)');
-    expect(hc.shade).toContain('rgb(0, 0, 0)');
-    expect(hc.shade).not.toContain('rgba(5, 20, 63');
+    expect(hc.labelBg).toBe('rgb(0, 0, 0)');
+    expect(hc.labelBorder).toBe('rgb(255, 255, 255)');
+    expect(hc.playBg).toBe('rgb(0, 0, 0)');
+    expect(hc.playBorder).toBe('rgb(255, 230, 0)');
+    expect(hc.shade).toMatch(/^rgba\(0, 0, 0/);
     await page.locator('[data-video-open]').click();
     await expect(page.locator('#video-dialog iframe')).toHaveCount(1);
     expect((await axe(page)).violations, 'open dialog, high contrast').toEqual([]);
@@ -304,10 +405,12 @@ test.describe('featured report video (YouTube embed, wiring)', () => {
           name: cs.animationName,
           dur: parseFloat(cs.animationDuration),
           tr: parseFloat(getComputedStyle(document.querySelector('.vid__poster')!).transitionDuration),
+          img: parseFloat(getComputedStyle(document.querySelector('.vid__pic img')!).transitionDuration),
         };
       });
       expect(r.name === 'none' || r.dur < 0.01, `${mode}: ping`).toBe(true);
       expect(r.tr, `${mode}: hover transition`).toBeLessThan(0.01);
+      expect(r.img, `${mode}: picture zoom`).toBeLessThan(0.01);
       await ctx.close();
     }
   });
@@ -329,7 +432,16 @@ for (const w of WIDTHS) {
     const b = (await poster.boundingBox())!;
     expect(Math.abs(b.width / b.height - 16 / 9), '16:9').toBeLessThan(0.02);
     expect(b.width, 'a major visual anchor: at least 88% of a phone, 60% of a desktop screen').toBeGreaterThanOrEqual(w < 700 ? w * 0.88 : w * 0.6);
-    expect((await page.locator('.vid__play').boundingBox())!.width).toBeGreaterThanOrEqual(44);
+    const play = (await page.locator('.vid__play').boundingBox())!;
+    const label = (await page.locator('.vid__label').boundingBox())!;
+    expect(play.width).toBeGreaterThanOrEqual(58);
+    expect(Math.abs(play.x + play.width / 2 - (b.x + b.width / 2)), 'Play centred horizontally').toBeLessThan(1.5);
+    expect(Math.abs(play.y + play.height / 2 - (b.y + b.height / 2)), 'Play centred vertically').toBeLessThan(1.5);
+    expect(label.y, 'label below the disc').toBeGreaterThanOrEqual(play.y + play.height - 0.5);
+    expect(label.x).toBeGreaterThanOrEqual(b.x);
+    expect(label.x + label.width).toBeLessThanOrEqual(b.x + b.width);
+    expect(label.y + label.height).toBeLessThanOrEqual(b.y + b.height);
+    await expect(page.locator('.vid__poster img')).toHaveJSProperty('complete', true);
     await page.waitForTimeout(300);
     expect((await poster.boundingBox())!.height, 'no layout shift').toBeCloseTo(b.height, 0);
     const isChromium = test.info().project.name === 'chromium';
