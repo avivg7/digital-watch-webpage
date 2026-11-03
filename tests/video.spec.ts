@@ -261,18 +261,23 @@ test.describe('featured report video (YouTube embed, wiring)', () => {
     await expect(page.locator('main a[href="https://policies.google.com/privacy"]')).toHaveCount(1);
   });
 
-  test('accessibility: axe finds nothing on the section or on the open dialog (default and high contrast)', async ({ page }) => {
+  test('accessibility: axe finds nothing on the section or on the open dialog (default contrast)', async ({ page }) => {
     await mockEmbed(page);
     await page.goto('./');
     await settle(page);
-    expect((await axe(page)).violations, 'section, default').toEqual([]);
+    expect((await axe(page)).violations, 'section').toEqual([]);
     await page.locator('[data-video-open]').click();
     await expect(page.locator('#video-dialog iframe')).toHaveCount(1);
     expect((await axe(page)).violations, 'open dialog').toEqual([]);
-    await page.keyboard.press('Escape');
+  });
+
+  test('accessibility: high contrast: axe finds nothing on the section or the open dialog, and the poster overlay overrides really apply', async ({ page }) => {
+    await mockEmbed(page);
+    await page.goto('./');
     await page.evaluate(() => document.documentElement.setAttribute('data-contrast', 'high'));
+    await settle(page);
     expect((await axe(page)).violations, 'section, high contrast').toEqual([]);
-    // the high-contrast overrides really apply to the poster overlay (a mistyped selector once silently disabled them)
+    // a mistyped selector once silently disabled these overrides, and axe did not notice: assert the computed styles
     const hc = await page.evaluate(() => ({
       badgeBg: getComputedStyle(document.querySelector('.vid__badge')!).backgroundColor,
       badgeBorder: getComputedStyle(document.querySelector('.vid__badge')!).borderTopColor,
@@ -283,6 +288,7 @@ test.describe('featured report video (YouTube embed, wiring)', () => {
     expect(hc.shade).toContain('rgb(0, 0, 0)');
     expect(hc.shade).not.toContain('rgba(5, 20, 63');
     await page.locator('[data-video-open]').click();
+    await expect(page.locator('#video-dialog iframe')).toHaveCount(1);
     expect((await axe(page)).violations, 'open dialog, high contrast').toEqual([]);
   });
 
