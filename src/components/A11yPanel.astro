@@ -23,7 +23,7 @@ const toggles = [
   <p class="a11y-panel__intro">ההגדרות נשמרות במכשיר הזה בלבד. האתר נבנה להיות נגיש גם בלעדיהן.</p>
   <fieldset class="a11y-row">
     <legend>גודל טקסט</legend>
-    <div class="seg" role="group" aria-label="גודל טקסט">
+    <div class="seg">
       {sizes.map((s) => (
         <button type="button" data-size={s.v} aria-pressed="false">
           {s.t}
@@ -86,7 +86,7 @@ const toggles = [
     panel.querySelectorAll<HTMLButtonElement>('[data-toggle]').forEach((b) => {
       const on = !!prefs[b.dataset.toggle as keyof Prefs];
       b.setAttribute('aria-pressed', String(on));
-      const st = b.querySelector('.st');
+      const st = b.querySelector('.st__t');
       if (st) st.textContent = on ? 'פעיל' : 'כבוי';
     });
   };

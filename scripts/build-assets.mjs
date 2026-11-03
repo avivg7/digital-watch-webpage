@@ -13,7 +13,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 // order = the order of the gallery; the first one is the default stage image
 const GALLERY = [
-  { id: 'room', file: 'main.png', redact: [{ x: 545, y: 150, w: 230, h: 235 }] },
+  { id: 'room', file: 'main.png', redact: [{ x: 525, y: 115, w: 280, h: 290 }] },
   { id: 'overview', file: 'Screenshot 2026-11-02 at 22.02.35.png' },
   { id: 'availability', file: 'Screenshot 2026-11-02 at 21.59.09.png' },
   { id: 'shifts', file: 'Screenshot 2026-11-02 at 22.00.25.png' },

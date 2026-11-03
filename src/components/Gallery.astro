@@ -39,7 +39,7 @@ const first = items[0];
         </div>
         <button type="button" class="zoom" data-open-lightbox>
           <Icon name="expand" />
-          <span>הגדלה</span>
+          <span class="zoom__t">הגדלה</span>
         </button>
       </figure>
 
@@ -51,11 +51,11 @@ const first = items[0];
           <span data-pos>1</span> מתוך {items.length}
         </p>
         <div class="arrows">
-          <button type="button" class="arrow" data-step="1" aria-label="התמונה הבאה">
-            <Icon name="next" />
-          </button>
           <button type="button" class="arrow" data-step="-1" aria-label="התמונה הקודמת">
             <Icon name="prev" />
+          </button>
+          <button type="button" class="arrow" data-step="1" aria-label="התמונה הבאה">
+            <Icon name="next" />
           </button>
         </div>
       </div>
@@ -105,7 +105,7 @@ const first = items[0];
           <span>סגירה</span>
         </button>
       </div>
-      <div class="lightbox__img">
+      <div class="lightbox__img" tabindex="0" role="region" aria-label="התמונה המוגדלת. בטלפון אפשר לגלול ולהגדיל באצבעות">
         <picture>
           <source type="image/avif" data-lb-avif />
           <source type="image/webp" data-lb-webp />
@@ -113,13 +113,14 @@ const first = items[0];
         </picture>
       </div>
       <div>
+        <p class="lightbox__hint">בטלפון: גללו או הגדילו באצבעות כדי לראות את המסך במלואו</p>
         <p class="lightbox__cap" id="lb-cap"></p>
         <div class="lightbox__nav">
-          <button type="button" class="arrow" data-lb-step="1" aria-label="התמונה הבאה">
-            <Icon name="next" />
-          </button>
           <button type="button" class="arrow" data-lb-step="-1" aria-label="התמונה הקודמת">
             <Icon name="prev" />
+          </button>
+          <button type="button" class="arrow" data-lb-step="1" aria-label="התמונה הבאה">
+            <Icon name="next" />
           </button>
         </div>
       </div>

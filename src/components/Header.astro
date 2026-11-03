@@ -42,6 +42,9 @@ const prefix = home ? '' : u('');
     };
     btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
     nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => set(false)));
+    document.addEventListener('click', (e) => {
+      if (btn.getAttribute('aria-expanded') === 'true' && e.target instanceof Node && !nav.contains(e.target) && !btn.contains(e.target)) set(false);
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
         set(false);

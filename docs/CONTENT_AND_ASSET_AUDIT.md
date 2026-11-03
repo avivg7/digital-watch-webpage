@@ -4,18 +4,18 @@ Date: 2026-11-03. Scope: everything the owner supplied, what was inspected, what
 
 ## 1. What was inspected
 
-| Source                                                        | How                                                                                                      |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `assets/` in this folder (git-ignored, never published)       | `sips`, `ffprobe`, `file`, and each image opened and looked at                                           |
-| `Digital_Guard_Landing_Page (2).html` (owner's old prototype) | read in full; text, links and the one script extracted                                                   |
-| The Digital Watch app, read-only (`public/brand`, tokens)     | logo and emblem files copied; colour tokens and font read from `globals.css`; **no app file was edited** |
-| Linked pages (CIC site, Galey Israel, Channel 13, gov.il)     | fetched; title, date and description read (see section 6)                                                |
+| Source                                                        | How                                                                                            |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `assets/` in this folder (git-ignored, never published)       | `sips`, `ffprobe`, `file`, and each image opened and looked at                                 |
+| `Digital_Guard_Landing_Page (2).html` (owner's old prototype) | read in full; text, links and the one script extracted                                         |
+| The owner's application, read-only                            | two brand files copied and the colour tokens and font read; **no application file was edited** |
+| Linked pages (CIC site, Galey Israel, Channel 13, gov.il)     | fetched; title, date and description read (see section 6)                                      |
 
 ## 2. Asset inventory and decisions
 
 | File                                                       | Facts                                                                                                                                                  | Decision                                                                                                                                                                            |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `videos/7F0744CB-…MP4`                                     | HEVC 2420x1360, 78 s, 151 MB, AAC; Apple ReplayKit screen recording; frames show the **Channel 13 logo**, an Ome.tv chat and identifiable people       | **`LINKED_ONLY_RIGHTS_PENDING`**. Not copied, not committed, not published; **no frame or poster was derived from it**. The site links to the report instead.                       |
+| `videos/7F0744CB-…MP4`                                     | HEVC 2420x1360, 78 s, 151 MB; a screen recording of a broadcast; the frames show **Channel 13's logo**, a video-chat window and identifiable people    | **`LINKED_ONLY_RIGHTS_PENDING`**. Not copied, not committed, not published; **no frame or poster was derived from it**. The site links to the report instead.                       |
 | `images/app_photo/main.png`                                | 1670x942, 1.4 MB. Demo "work room" with **two people**: one soldier (face already blurred in the source) and one woman with a **clearly visible face** | Published as the default gallery image **only as a redacted derivative** (the visible face is blurred with a feathered mask). The unredacted file stays local. See rights gate R-3. |
 | `images/app_photo/Screenshot … 22.02.35.png`               | 1918x1075 — "overview" dashboard, demo user "(דמו)"                                                                                                    | Published (resized, metadata-free)                                                                                                                                                  |
 | `images/app_photo/Screenshot … 21.59.09.png`               | 1908x1076 — availability calendar, synthetic data                                                                                                      | Published                                                                                                                                                                           |
@@ -33,7 +33,7 @@ Every published image is re-encoded by `scripts/build-assets.mjs`: resized, conv
 
 Looked for: real names, e-mail addresses, accounts, coordinates, incident text, session identifiers, strangers.
 
-- All six screenshots show a **synthetic demo user, labelled "(דמו)"**, and badges "DEMO / SYNTHETIC". No e-mail address, id, coordinate or incident text is visible.
+- All six screenshots show a **demo user, labelled "(דמו)"**, and demo badges. No e-mail address, id, coordinate or incident text is visible.
 - `main.png` is the only image with people. It is labelled "דוגמה סינתטית — לא אדם אמיתי" ("synthetic example, not a real person") in the product, **but the app's own synthetic participant is a canvas drawing, not a photograph**, so the origin of these two photographs is not recorded anywhere. Treated as a possible real person until the owner says otherwise: the face is blurred in the public copy and the caption says so.
 - The notes field in the work-room shot shows a generic training sentence, not an incident.
 

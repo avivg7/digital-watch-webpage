@@ -31,7 +31,7 @@ for (const w of WIDTHS) {
         );
         expect(wide, 'images outside the viewport').toEqual([]);
       }
-      if (browserName === 'chromium') {
+      if (test.info().project.name === 'chromium') {
         fs.mkdirSync(path.join(OUT, String(w)), { recursive: true });
         await page.screenshot({ path: path.join(OUT, String(w), `${route === './' ? 'home' : route.replace('/', '')}.png`), fullPage: true });
       }

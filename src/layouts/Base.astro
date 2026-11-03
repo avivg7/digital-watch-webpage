@@ -28,6 +28,12 @@ const fullTitle = home ? title : `${title} | ${SITE.name}`;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#05143F" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!-- GitHub Pages cannot send security headers, so the policy is delivered as a meta tag: it keeps the "nothing third-party is loaded" promise enforceable by the browser. The site needs inline script/style (the pre-paint settings script, Astro's inline CSS). -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
     {noindex ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index,follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" sizes="48x48" href={u('favicon.png')} />
@@ -65,6 +71,9 @@ const fullTitle = home ? title : `${title} | ${SITE.name}`;
   <body>
     <a class="skip" href="#main">
       דלגו לתוכן הראשי
+    </a>
+    <a class="skip skip--second" href="#a11y-open">
+      דלגו להתאמות נגישות
     </a>
     <Header home={home} />
     <main id="main" tabindex="-1">

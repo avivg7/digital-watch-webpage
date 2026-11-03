@@ -100,4 +100,29 @@ test.describe('gallery', () => {
       expect((await page.locator('.thumb').nth(i).getAttribute('aria-label'))!).toContain(`${i + 1} מתוך 6`);
     }
   });
+
+  test('RTL arrows: "previous" is on the right and "next" on the left, in the stage and in the lightbox', async ({ page }) => {
+    const prev = (await page.locator('[data-step="-1"]').first().boundingBox())!;
+    const next = (await page.locator('[data-step="1"]').first().boundingBox())!;
+    expect(prev.x, 'previous must be to the right of next in RTL').toBeGreaterThan(next.x);
+    await page.locator('[data-open-lightbox]').click();
+    const lp = (await page.locator('[data-lb-step="-1"]').boundingBox())!;
+    const ln = (await page.locator('[data-lb-step="1"]').boundingBox())!;
+    expect(lp.x).toBeGreaterThan(ln.x);
+  });
+
+  test('on a phone the lightbox shows the screenshot at reading size in a scrollable, focusable region', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'phone layout only');
+    await page.locator('[data-open-lightbox]').click();
+    const box = page.locator('.lightbox__img');
+    await expect(box).toHaveAttribute('tabindex', '0');
+    const dims = await page.evaluate(() => {
+      const el = document.querySelector('.lightbox__img') as HTMLElement;
+      const img = el.querySelector('img') as HTMLImageElement;
+      return { imgW: img.getBoundingClientRect().width, boxW: el.clientWidth, scrollable: el.scrollWidth > el.clientWidth };
+    });
+    expect(dims.imgW).toBeGreaterThan(dims.boxW * 2);
+    expect(dims.scrollable).toBe(true);
+    await expect(page.locator('.lightbox__hint')).toBeVisible();
+  });
 });

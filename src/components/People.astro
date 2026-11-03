@@ -1,5 +1,5 @@
 ---
-import { LINKS, SITE } from '../data/site';
+import { LINKS, SHOW, SITE } from '../data/site';
 import { u } from '../data/url';
 import Icon from './Icon.astro';
 ---
@@ -8,22 +8,24 @@ import Icon from './Icon.astro';
   <div class="wrap">
     <div class="sec-head">
       <h2 id="people-title">האנשים שמאחורי המיזם</h2>
-      <p class="lede measure">מיזם שנולד מהתנדבות, בתוך ארגון שעוסק בזירה הדיגיטלית.</p>
+      <p class="lede measure">מיזם שנולד מהתנדבות.</p>
     </div>
 
-    <div class="org">
-      <div class="org__logo">
-        <picture>
-          <source type="image/webp" srcset={u('img/cic-logo.webp')} />
-          <img src={u('img/cic-logo.png')} width="600" height="268" alt={`לוגו ${SITE.orgShort}`} loading="lazy" decoding="async" />
-        </picture>
-      </div>
+    <div class={SHOW.cicLogo ? 'org' : 'org org--nologo'}>
+      {SHOW.cicLogo && (
+        <div class="org__logo">
+          <picture>
+            <source type="image/webp" srcset={u('img/cic-logo.webp')} />
+            <img src={u('img/cic-logo.png')} width="600" height="268" alt={`לוגו ${SITE.orgShort}`} loading="lazy" decoding="async" />
+          </picture>
+        </div>
+      )}
       <div>
         <h3 style="font-size:var(--step-1)">
           פועלים במסגרת <bdi>{SITE.orgShort}</bdi>
         </h3>
         <p style="margin-block-start:.5rem">
-          {SITE.name} פועל במסגרת <bdi>{SITE.orgShort}</bdi>. לפרטים על הארגון ועל דרכי הפנייה אליו, בקרו באתר שלו.
+          לפרטים על הארגון ועל דרכי הפנייה אליו, בקרו באתר של <bdi>{SITE.orgShort}</bdi>.
         </p>
         <a class="btn btn--primary" href={LINKS.cic} target="_blank" rel="noopener noreferrer">
           לאתר <bdi>{SITE.orgShort}</bdi> <Icon name="external" class="ext-ic" />
@@ -34,18 +36,20 @@ import Icon from './Icon.astro';
 
     <div class="people">
       <article class="person person--omri">
-        <div class="person__ph">
-          <img
-            src={u('img/portrait-omri-800.webp')}
-            srcset={`${u('img/portrait-omri-400.webp')} 400w, ${u('img/portrait-omri-800.webp')} 800w`}
-            sizes="(min-width: 720px) 560px, 92vw"
-            width="800"
-            height="800"
-            alt="עומרי רולס, פורטרט"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
+        {SHOW.portraits && (
+          <div class="person__ph">
+            <img
+              src={u('img/portrait-omri-800.webp')}
+              srcset={`${u('img/portrait-omri-400.webp')} 400w, ${u('img/portrait-omri-800.webp')} 800w`}
+              sizes="(min-width: 720px) 560px, 92vw"
+              width="800"
+              height="800"
+              alt="עומרי רולס, פורטרט"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        )}
         <div>
           <h3>עומרי רולס</h3>
           <p class="person__role">
@@ -57,18 +61,20 @@ import Icon from './Icon.astro';
         </div>
       </article>
       <article class="person person--aviv">
-        <div class="person__ph">
-          <img
-            src={u('img/portrait-aviv-483.webp')}
-            srcset={`${u('img/portrait-aviv-400.webp')} 400w, ${u('img/portrait-aviv-483.webp')} 483w`}
-            sizes="(min-width: 720px) 483px, 92vw"
-            width="483"
-            height="483"
-            alt="אביב גרמן, פורטרט"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
+        {SHOW.portraits && (
+          <div class="person__ph">
+            <img
+              src={u('img/portrait-aviv-483.webp')}
+              srcset={`${u('img/portrait-aviv-400.webp')} 400w, ${u('img/portrait-aviv-483.webp')} 483w`}
+              sizes="(min-width: 720px) 483px, 92vw"
+              width="483"
+              height="483"
+              alt="אביב גרמן, פורטרט"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        )}
         <div>
           <h3>אביב גרמן</h3>
           <p class="person__role">מוביל המיזם הטכנולוגי</p>

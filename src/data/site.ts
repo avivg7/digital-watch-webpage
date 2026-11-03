@@ -26,7 +26,7 @@ export const LINKS = {
 
 export const NAV = [
   { href: '#evidence', label: 'הבעיה' },
-  { href: '#why', label: 'למה' },
+  { href: '#why', label: 'למה בנינו' },
   { href: '#how', label: 'איך זה עובד' },
   { href: '#product', label: 'המערכת' },
   { href: '#people', label: 'האנשים' },
@@ -36,7 +36,7 @@ export const GALLERY = [
   {
     id: 'room',
     label: 'חדר העבודה',
-    caption: 'חדר העבודה: מפגש הדגמה עם משתתף סינתטי, כפתור עצירה מיידית ודיווח אירוע מהיר. הפנים הוסתרו באתר זה.',
+    caption: 'חדר העבודה: מפגש הדגמה, כפתור עצירה מיידית ודיווח אירוע מהיר. הפנים הוסתרו באתר זה.',
     alt: 'מסך חדר העבודה במערכת: שני חלונות וידאו של מפגש הדגמה, פנים מטושטשות, שעון משמרת פעיל, כפתור עצירה מיידית וטופס דיווח אירוע מהיר.',
   },
   {
@@ -72,3 +72,7 @@ export const GALLERY = [
 ] as const;
 
 export const SIZES = [640, 1200, 1920] as const;
+
+// Switches for material whose right to publish is still to be confirmed by the owner (docs/RIGHTS_AND_PUBLICATION_GATE.md, O-2 to O-4).
+// Setting one to false removes it from every page at the next build: the portraits become text-only profiles, the CIC card loses its logo.
+export const SHOW = { portraits: true, cicLogo: true } as const;

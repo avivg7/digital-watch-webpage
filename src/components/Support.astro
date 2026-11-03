@@ -6,37 +6,39 @@ import Icon from './Icon.astro';
 <section class="sec support" id="support" aria-labelledby="support-title">
   <div class="wrap support__grid">
     <div>
-      <h2 id="support-title">בואו נבנה את שכבת ההגנה הבאה</h2>
+      <h2 id="support-title">בואו נבנה יחד שכבת ערנות</h2>
       <p class="lede measure" style="margin-block-start:1.2rem">
-        המיזם נבנה בהתנדבות ועדיין בדרך. תמיכה שלכם מקרבת אותו ליום שבו שיחה חיה אחת לא תהיה חשופה.
+        המיזם נבנה בהתנדבות ועדיין בפיתוח. התמיכה שלכם תאפשר להשלים את הפיתוח, להכשיר מתנדבים ולבחון את המערכת בזהירות ובאחריות.
       </p>
       <div class="support__act">
         <p>
           <a class="btn btn--light" href={LINKS.cic} target="_blank" rel="noopener noreferrer">
-            לשותפות עם <bdi>{SITE.orgShort}</bdi> <Icon name="external" class="ext-ic" />
+            לפנייה דרך האתר של <bdi>{SITE.orgShort}</bdi>
+            <Icon name="external" class="ext-ic" />
             <span class="sr-only"> (נפתח בלשונית חדשה)</span>
           </a>
         </p>
-        <p class="support__note">אתר זה אינו מקבל תרומות ואינו אוסף פרטים. הפנייה מתבצעת מול {SITE.orgNameHe} דרך האתר שלו.</p>
+        <p class="support__note">
+          הפנייה מתבצעת מול {SITE.orgShort} דרך האתר שלו; כדאי לציין שאתם פונים בעניין {SITE.name}. אין באתר הזה טופס, תרומה או תשלום.
+        </p>
       </div>
     </div>
-    <div class="support__ways">
-      <div class="way">
-        <h3>ציוד ותשתיות</h3>
-        <p>מחשוב, אחסון ושירותים שנדרשים כדי להפעיל את המערכת באחריות.</p>
-      </div>
-      <div class="way">
-        <h3>מימון</h3>
-        <p>פיתוח, הדרכה והפעלה של מיזם שמבוסס על מתנדבים.</p>
-      </div>
-      <div class="way">
-        <h3>שותפות אסטרטגית</h3>
-        <p>ארגונים וגופים שיכולים להרחיב את הידע, ההגעה וההשפעה.</p>
-      </div>
-      <div class="way">
-        <h3>התנדבות</h3>
-        <p>אנשים שרוצים להיות חלק מהקהילה, להתאמן ולעמוד במשמרת.</p>
-      </div>
+    <div>
+      <h3 class="support__ways-title">דרכים לתמוך</h3>
+      <ul class="support__ways">
+        <li>
+          <strong>ציוד ותשתיות</strong>מחשוב, אחסון ושירותים שנדרשים כדי להפעיל את המערכת באחריות.
+        </li>
+        <li>
+          <strong>מימון</strong>פיתוח תוכנה, הכנת הדרכה ותוכן, ותיאום מתנדבים.
+        </li>
+        <li>
+          <strong>שותפות אסטרטגית</strong>גופים שיכולים להרחיב את הידע ואת ההגעה לקהלים רלוונטיים.
+        </li>
+        <li>
+          <strong>התנדבות</strong>אנשים שרוצים להיות חלק מהקהילה, להתאמן ולעמוד במשמרת.
+        </li>
+      </ul>
     </div>
   </div>
 </section>

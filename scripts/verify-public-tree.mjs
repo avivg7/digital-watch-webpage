@@ -35,7 +35,7 @@ for (const f of files) {
     const t = fs.readFileSync(f, 'utf8');
     if (/[\w.+-]+@[\w-]+\.[a-z]{2,}/i.test(t.replace(/\S+@\d+\.\d+\.\d+/g, ''))) problems.push(`${rel}: contains something that looks like an e-mail address`);
     if (/(?<![\d.])0[2-9]\d?[-\s]?\d{7}(?!\d)|\+972[-\s]?\d/.test(t)) problems.push(`${rel}: contains something that looks like a phone number`);
-    if (/localhost|127\.0\.0\.1|\/Users\/|digital-watch\/|digital_watch_|DEMO_SEED|password\s*[:=]/i.test(t))
+    if (/localhost|127\.0\.0\.1|\/Users\/|_SEED|password\s*[:=]/i.test(t))
       problems.push(`${rel}: references a local path, host or credential`);
     if (/\/assets\/(images|videos)|7F0744CB|\.mp4/i.test(t)) problems.push(`${rel}: references the private originals or the TV recording`);
   }

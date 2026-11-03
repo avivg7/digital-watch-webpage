@@ -3,9 +3,9 @@ import { expect, test } from '@playwright/test';
 test('skip link is the first tab stop, becomes visible, and moves focus to the main content', async ({ page, browserName }) => {
   await page.goto('./');
   // Safari-family engines only Tab onto links when the user turns that option on, so in WebKit the link is focused directly (the rest of the check is the same)
-  if (browserName === 'webkit') await page.locator('.skip').focus();
+  if (browserName === 'webkit') await page.locator('.skip:not(.skip--second)').focus();
   else await page.keyboard.press('Tab');
-  const skip = page.locator('.skip');
+  const skip = page.locator('.skip:not(.skip--second)');
   await expect(skip).toBeFocused();
   expect((await skip.boundingBox())!.y).toBeGreaterThanOrEqual(0);
   await page.keyboard.press('Enter');
@@ -62,4 +62,36 @@ test('a link from a document page leads back to a home-page section', async ({ p
   await page.locator('nav.nav a[data-nav="evidence"]').click();
   await expect(page).toHaveURL(/\/digital-watch-webpage\/#evidence$/);
   await expect(page.locator('#evidence')).toBeInViewport();
+});
+
+test('a second skip link goes straight to the accessibility button', async ({ page, browserName }) => {
+  await page.goto('./');
+  const second = page.locator('.skip--second');
+  if (browserName === 'webkit') await second.focus();
+  else {
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+  }
+  await expect(second).toBeFocused();
+  await expect(second).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#a11y-open')).toBeFocused();
+});
+
+test('phone menu closes when the visitor taps outside it', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'phone layout only');
+  await page.goto('./');
+  await page.locator('#menu-toggle').click();
+  await expect(page.locator('#site-nav')).toBeVisible();
+  await page.mouse.click(20, 500);
+  await expect(page.locator('#site-nav')).toBeHidden();
+});
+
+test('a content security policy is delivered and forbids third-party loading', async ({ page }) => {
+  await page.goto('./');
+  const csp = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
+  expect(csp).toContain("default-src 'self'");
+  expect(csp).toContain("connect-src 'none'");
+  expect(csp).toContain("form-action 'none'");
+  expect(csp).not.toMatch(/https?:\/\//);
 });

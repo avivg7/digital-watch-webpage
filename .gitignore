@@ -23,3 +23,14 @@ playwright-report/
 coverage/
 .lighthouseci/
 screenshots-raw/
+
+# more media types that must never be committed from the originals
+*.m4v
+*.mkv
+*.avi
+*.heic
+*.heif
+*.wav
+*.mp3
+*.m4a
+*.zip
