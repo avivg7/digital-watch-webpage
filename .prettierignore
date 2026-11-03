@@ -1,0 +1,8 @@
+dist/
+.astro/
+node_modules/
+assets/
+test-results/
+package-lock.json
+public/
+docs/screenshots/

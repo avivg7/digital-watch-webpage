@@ -1,0 +1,250 @@
+---
+import { GALLERY, SIZES } from '../data/site';
+import { u } from '../data/url';
+import manifest from '../data/image-manifest.json';
+import Icon from './Icon.astro';
+
+const dims = Object.fromEntries(manifest.gallery.map((g) => [g.id, g]));
+const items = GALLERY.map((g) => ({ ...g, width: dims[g.id].width, height: dims[g.id].height }));
+const srcset = (id: string, fmt: 'avif' | 'webp') => SIZES.map((w) => `${u(`img/gallery-${id}-${w}.${fmt}`)} ${w}w`).join(', ');
+const first = items[0];
+---
+
+<section class="sec sec--dark" id="product" aria-labelledby="product-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="product-title">מאחורי כל משמרת עומדים אנשים.</h2>
+      <p class="lede measure">מאחוריהם — מערכת שהופכת ערנות לפעולה מסודרת.</p>
+    </div>
+
+    <div class="stage" data-gallery data-base={u('')} data-sizes={SIZES.join(',')}>
+      <figure class="stage__frame">
+        <div class="stage__shot" data-shot>
+          <picture>
+            <source type="image/avif" srcset={srcset(first.id, 'avif')} sizes="(min-width: 1260px) 1120px, 94vw" data-src-avif />
+            <source type="image/webp" srcset={srcset(first.id, 'webp')} sizes="(min-width: 1260px) 1120px, 94vw" data-src-webp />
+            <img
+              id="stage-img"
+              src={u(`img/gallery-${first.id}-1200.webp`)}
+              width={first.width}
+              height={first.height}
+              alt={first.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+          <p class="stage__err" role="status">
+            התמונה לא נטענה. אפשר לנסות שוב או לבחור תמונה אחרת.
+          </p>
+        </div>
+        <button type="button" class="zoom" data-open-lightbox>
+          <Icon name="expand" />
+          <span>הגדלה</span>
+        </button>
+      </figure>
+
+      <div class="stage__bar">
+        <p class="stage__cap" id="stage-cap" aria-live="polite">
+          {first.caption}
+        </p>
+        <p class="stage__count" aria-hidden="true">
+          <span data-pos>1</span> מתוך {items.length}
+        </p>
+        <div class="arrows">
+          <button type="button" class="arrow" data-step="1" aria-label="התמונה הבאה">
+            <Icon name="next" />
+          </button>
+          <button type="button" class="arrow" data-step="-1" aria-label="התמונה הקודמת">
+            <Icon name="prev" />
+          </button>
+        </div>
+      </div>
+
+      <div class="filmstrip" role="group" aria-label="בחירת צילום מסך">
+        {items.map((g, i) => (
+          <button
+            type="button"
+            class="thumb"
+            data-index={i}
+            aria-current={i === 0 ? 'true' : undefined}
+            aria-label={`צילום מסך ${i + 1} מתוך ${items.length}: ${g.label}`}
+          >
+            <span class="thumb__img">
+              <img src={u(`img/gallery-${g.id}-640.webp`)} width="640" height={Math.round((640 * g.height) / g.width)} alt="" loading="lazy" decoding="async" />
+            </span>
+            <span class="thumb__lbl">{g.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <noscript>
+        <ul class="nojs-list" style="display:block">
+          {items.map((g) => (
+            <li>
+              <a href={u(`img/gallery-${g.id}-1920.webp`)}>{g.label}</a>
+            </li>
+          ))}
+        </ul>
+      </noscript>
+
+      <script id="gallery-data" type="application/json" set:html={JSON.stringify(items)} />
+    </div>
+    <p class="measure" style="margin-block-start:1.4rem;color:var(--ink-on-dark-soft);font-size:var(--step--1)">
+      הנתונים בצילומי המסך הם נתוני הדגמה סינתטיים. הפנים שהופיעו בדוגמה הוסתרו באתר זה.
+    </p>
+  </div>
+
+  <dialog class="lightbox" id="lightbox" aria-label="תצוגה מוגדלת של צילום המסך">
+    <div class="lightbox__in">
+      <div class="lightbox__top">
+        <p class="stage__count" aria-live="polite">
+          <span data-lb-pos>1</span> מתוך {items.length}
+        </p>
+        <button type="button" class="btn btn--ghost" data-close-lightbox>
+          <Icon name="close" />
+          <span>סגירה</span>
+        </button>
+      </div>
+      <div class="lightbox__img">
+        <picture>
+          <source type="image/avif" data-lb-avif />
+          <source type="image/webp" data-lb-webp />
+          <img id="lb-img" alt="" />
+        </picture>
+      </div>
+      <div>
+        <p class="lightbox__cap" id="lb-cap"></p>
+        <div class="lightbox__nav">
+          <button type="button" class="arrow" data-lb-step="1" aria-label="התמונה הבאה">
+            <Icon name="next" />
+          </button>
+          <button type="button" class="arrow" data-lb-step="-1" aria-label="התמונה הקודמת">
+            <Icon name="prev" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</section>
+<script>
+  type Item = { id: string; label: string; caption: string; alt: string; width: number; height: number };
+  const root = document.querySelector<HTMLElement>('[data-gallery]');
+  if (root) {
+    const items: Item[] = JSON.parse(document.getElementById('gallery-data')!.textContent || '[]');
+    const base = root.dataset.base || '/';
+    const sizes = (root.dataset.sizes || '640,1200,1920').split(',').map(Number);
+    const set = (id: string, fmt: string) => sizes.map((w) => `${base}img/gallery-${id}-${w}.${fmt} ${w}w`).join(', ');
+    const shot = root.querySelector<HTMLElement>('[data-shot]')!;
+    const img = document.getElementById('stage-img') as HTMLImageElement;
+    const sAvif = root.querySelector<HTMLSourceElement>('[data-src-avif]')!;
+    const sWebp = root.querySelector<HTMLSourceElement>('[data-src-webp]')!;
+    const cap = document.getElementById('stage-cap')!;
+    const pos = root.querySelector<HTMLElement>('[data-pos]')!;
+    const thumbs = Array.from(root.querySelectorAll<HTMLButtonElement>('.thumb'));
+    const strip = root.querySelector<HTMLElement>('.filmstrip')!;
+    const dlg = document.getElementById('lightbox') as HTMLDialogElement;
+    const lbImg = document.getElementById('lb-img') as HTMLImageElement;
+    const lbAvif = dlg.querySelector<HTMLSourceElement>('[data-lb-avif]')!;
+    const lbWebp = dlg.querySelector<HTMLSourceElement>('[data-lb-webp]')!;
+    const lbCap = document.getElementById('lb-cap')!;
+    const lbPos = dlg.querySelector<HTMLElement>('[data-lb-pos]')!;
+    const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.getAttribute('data-motion') === 'reduce';
+    let cur = 0;
+    const preloaded = new Set<string>();
+    const preload = (i: number) => {
+      const it = items[(i + items.length) % items.length];
+      if (preloaded.has(it.id)) return;
+      preloaded.add(it.id);
+      new Image().src = `${base}img/gallery-${it.id}-1200.webp`;
+    };
+
+    const show = (i: number, { focusThumb = false } = {}) => {
+      cur = (i + items.length) % items.length;
+      const it = items[cur];
+      const apply = () => {
+        sAvif.srcset = set(it.id, 'avif');
+        sWebp.srcset = set(it.id, 'webp');
+        img.width = it.width;
+        img.height = it.height;
+        img.alt = it.alt;
+        img.src = `${base}img/gallery-${it.id}-1200.webp`;
+        shot.removeAttribute('data-error');
+      };
+      if (reduce()) {
+        apply();
+      } else {
+        shot.setAttribute('data-loading', 'true');
+        window.setTimeout(apply, 140);
+      }
+      cap.textContent = it.caption;
+      pos.textContent = String(cur + 1);
+      thumbs.forEach((t, k) => (k === cur ? t.setAttribute('aria-current', 'true') : t.removeAttribute('aria-current')));
+      const t = thumbs[cur];
+      if (t) {
+        // scroll the strip only (never the page)
+        const target = t.offsetLeft - strip.clientWidth / 2 + t.clientWidth / 2;
+        strip.scrollTo({ left: target, behavior: reduce() ? 'auto' : 'smooth' });
+        if (focusThumb) t.focus();
+      }
+      preload(cur + 1);
+      preload(cur - 1);
+      if (dlg.open) lb();
+    };
+    img.addEventListener('load', () => shot.removeAttribute('data-loading'));
+    img.addEventListener('error', () => {
+      shot.removeAttribute('data-loading');
+      shot.setAttribute('data-error', 'true');
+    });
+
+    thumbs.forEach((t, k) => t.addEventListener('click', () => show(k)));
+    root.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((b) => b.addEventListener('click', () => show(cur + Number(b.dataset.step))));
+
+    // RTL: "next" points to the left, so the left arrow key advances; in an LTR context it is the right arrow
+    const fwd = () => (getComputedStyle(root).direction === 'rtl' ? 'ArrowLeft' : 'ArrowRight');
+    const bwd = () => (getComputedStyle(root).direction === 'rtl' ? 'ArrowRight' : 'ArrowLeft');
+    const keys = (e: KeyboardEvent, focusThumb: boolean) => {
+      if (e.key === fwd()) {
+        e.preventDefault();
+        show(cur + 1, { focusThumb });
+      } else if (e.key === bwd()) {
+        e.preventDefault();
+        show(cur - 1, { focusThumb });
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        show(0, { focusThumb });
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        show(items.length - 1, { focusThumb });
+      }
+    };
+    strip.addEventListener('keydown', (e) => keys(e, true));
+
+    // lightbox (native <dialog>: focus is trapped inside, Escape closes, focus returns to the button that opened it)
+    function lb() {
+      const it = items[cur];
+      lbAvif.srcset = set(it.id, 'avif');
+      lbWebp.srcset = set(it.id, 'webp');
+      lbAvif.sizes = lbWebp.sizes = '100vw';
+      lbImg.src = `${base}img/gallery-${it.id}-1920.webp`;
+      lbImg.alt = it.alt;
+      lbCap.textContent = it.caption;
+      lbPos.textContent = String(cur + 1);
+    }
+    const openLb = () => {
+      lb();
+      dlg.showModal();
+    };
+    root.querySelector('[data-open-lightbox]')?.addEventListener('click', openLb);
+    img.addEventListener('click', openLb);
+    dlg.querySelector('[data-close-lightbox]')?.addEventListener('click', () => dlg.close());
+    dlg.querySelectorAll<HTMLButtonElement>('[data-lb-step]').forEach((b) => b.addEventListener('click', () => show(cur + Number(b.dataset.lbStep))));
+    dlg.addEventListener('keydown', (e) => keys(e, false));
+    // the dialog fills the screen, so "outside" means any click that is not on the image, a button or the text
+    dlg.addEventListener('click', (e) => {
+      if (!(e.target as HTMLElement).closest('button, img, p')) dlg.close();
+    });
+    // the first screenshot is already rendered by the server; only warm the neighbours (no layout reads at start-up)
+    preload(1);
+    preload(items.length - 1);
+  }
+</script>

@@ -1,0 +1,144 @@
+---
+import Icon from './Icon.astro';
+const sizes = [
+  { v: '0', t: '100%' },
+  { v: '1', t: '112%' },
+  { v: '2', t: '125%' },
+  { v: '3', t: '150%' },
+];
+const toggles = [
+  { k: 'contrast', t: 'ניגודיות גבוהה' },
+  { k: 'motion', t: 'הפחתת תנועה' },
+  { k: 'links', t: 'קו תחתון לקישורים' },
+  { k: 'spacing', t: 'ריווח שורות ואותיות' },
+];
+---
+
+<button class="a11y-fab" type="button" id="a11y-open" aria-expanded="false" aria-controls="a11y-panel" aria-label="נגישות: פתיחת אפשרויות התאמה">
+  <Icon name="access" />
+  <span>נגישות</span>
+</button>
+<div class="a11y-panel" id="a11y-panel" role="dialog" aria-labelledby="a11y-title" hidden>
+  <h2 id="a11y-title">התאמות נגישות</h2>
+  <p class="a11y-panel__intro">ההגדרות נשמרות במכשיר הזה בלבד. האתר נבנה להיות נגיש גם בלעדיהן.</p>
+  <fieldset class="a11y-row">
+    <legend>גודל טקסט</legend>
+    <div class="seg" role="group" aria-label="גודל טקסט">
+      {sizes.map((s) => (
+        <button type="button" data-size={s.v} aria-pressed="false">
+          {s.t}
+        </button>
+      ))}
+    </div>
+  </fieldset>
+  {toggles.map((t) => (
+    <div class="a11y-row">
+      <button type="button" class="tog" data-toggle={t.k} aria-pressed="false">
+        <span>{t.t}</span>
+        <span class="st" aria-hidden="true">
+          כבוי
+        </span>
+      </button>
+    </div>
+  ))}
+  <div class="a11y-actions">
+    <button type="button" class="btn btn--ghost" id="a11y-reset">
+      איפוס הכול
+    </button>
+    <button type="button" class="btn btn--primary" id="a11y-close">
+      סגירה
+    </button>
+  </div>
+  <p class="sr-only" role="status" aria-live="polite" id="a11y-live"></p>
+</div>
+<script>
+  type Prefs = { text?: string; contrast?: boolean; motion?: boolean; links?: boolean; spacing?: boolean };
+  const KEY = 'dw-a11y';
+  const root = document.documentElement;
+  const fab = document.getElementById('a11y-open') as HTMLButtonElement;
+  const panel = document.getElementById('a11y-panel') as HTMLElement;
+  const live = document.getElementById('a11y-live') as HTMLElement;
+
+  const read = (): Prefs => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY) || '{}');
+    } catch {
+      return {};
+    }
+  };
+  const write = (p: Prefs) => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(p));
+    } catch {
+      /* storage unavailable: the choice still applies to this page view */
+    }
+  };
+  let prefs = read();
+
+  const apply = () => {
+    const set = (name: string, on: boolean, val = '1') => (on ? root.setAttribute(name, val) : root.removeAttribute(name));
+    set('data-text', !!prefs.text && prefs.text !== '0', prefs.text);
+    set('data-contrast', !!prefs.contrast, 'high');
+    set('data-motion', !!prefs.motion, 'reduce');
+    set('data-links', !!prefs.links);
+    set('data-spacing', !!prefs.spacing);
+    panel.querySelectorAll<HTMLButtonElement>('[data-size]').forEach((b) => b.setAttribute('aria-pressed', String((prefs.text || '0') === b.dataset.size)));
+    panel.querySelectorAll<HTMLButtonElement>('[data-toggle]').forEach((b) => {
+      const on = !!prefs[b.dataset.toggle as keyof Prefs];
+      b.setAttribute('aria-pressed', String(on));
+      const st = b.querySelector('.st');
+      if (st) st.textContent = on ? 'פעיל' : 'כבוי';
+    });
+  };
+  const say = (msg: string) => {
+    live.textContent = '';
+    window.setTimeout(() => (live.textContent = msg), 30);
+  };
+
+  const open = (o: boolean) => {
+    panel.hidden = !o;
+    fab.setAttribute('aria-expanded', String(o));
+    if (o) (panel.querySelector('[data-size][aria-pressed="true"]') as HTMLElement | null)?.focus();
+    else fab.focus();
+  };
+  fab.addEventListener('click', () => open(Boolean(panel.hidden)));
+  document.getElementById('a11y-close')?.addEventListener('click', () => open(false));
+  panel.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      open(false);
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden && !(e.target instanceof Node && panel.contains(e.target))) open(false);
+  });
+
+  panel.querySelectorAll<HTMLButtonElement>('[data-size]').forEach((b) =>
+    b.addEventListener('click', () => {
+      prefs.text = b.dataset.size;
+      write(prefs);
+      apply();
+      say(`גודל הטקסט עודכן: ${b.textContent}`);
+    }),
+  );
+  panel.querySelectorAll<HTMLButtonElement>('[data-toggle]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const k = b.dataset.toggle as 'contrast' | 'motion' | 'links' | 'spacing';
+      prefs[k] = !prefs[k];
+      write(prefs);
+      apply();
+      say(`${b.firstElementChild?.textContent}: ${prefs[k] ? 'פעיל' : 'כבוי'}`);
+    }),
+  );
+  document.getElementById('a11y-reset')?.addEventListener('click', () => {
+    prefs = {};
+    try {
+      localStorage.removeItem(KEY);
+    } catch {
+      /* ignore */
+    }
+    apply();
+    say('כל ההתאמות אופסו');
+  });
+  apply();
+</script>

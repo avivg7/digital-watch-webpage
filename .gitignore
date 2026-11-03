@@ -1,0 +1,25 @@
+# --- RIGHTS / PRIVACY GATE: the originals are NEVER committed ---
+# assets/ holds the owner's raw material: a third-party TV recording (rights pending), unredacted screenshots and original portraits.
+# Only reviewed, optimised derivatives live in public/ (see docs/RIGHTS_AND_PUBLICATION_GATE.md).
+/assets/
+/Digital_Guard_Landing_Page*.html
+*.mp4
+*.MP4
+*.mov
+*.MOV
+*.webm
+*.env
+.env*
+*.pem
+*.key
+
+node_modules/
+dist/
+.astro/
+test-results/
+playwright-report/
+.DS_Store
+*.log
+coverage/
+.lighthouseci/
+screenshots-raw/

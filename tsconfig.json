@@ -1,0 +1,6 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "src/**/*", "scripts/**/*", "tests/**/*", "playwright.config.ts"],
+  "exclude": ["dist", "node_modules", "assets"],
+  "compilerOptions": { "resolveJsonModule": true }
+}

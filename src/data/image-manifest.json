@@ -1,0 +1,44 @@
+{
+  "gallery": [
+    {
+      "id": "room",
+      "width": 1670,
+      "height": 942
+    },
+    {
+      "id": "overview",
+      "width": 1918,
+      "height": 1075
+    },
+    {
+      "id": "availability",
+      "width": 1908,
+      "height": 1076
+    },
+    {
+      "id": "shifts",
+      "width": 1905,
+      "height": 1076
+    },
+    {
+      "id": "training",
+      "width": 1917,
+      "height": 1078
+    },
+    {
+      "id": "preflight",
+      "width": 1917,
+      "height": 1076
+    }
+  ],
+  "portraits": {
+    "omri": {
+      "width": 800,
+      "height": 800
+    },
+    "aviv": {
+      "width": 483,
+      "height": 483
+    }
+  }
+}

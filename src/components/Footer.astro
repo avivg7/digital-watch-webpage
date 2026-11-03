@@ -1,0 +1,69 @@
+---
+import { LINKS, NAV, SITE } from '../data/site';
+import { u } from '../data/url';
+import Icon from './Icon.astro';
+interface Props {
+  home: boolean;
+}
+const { home } = Astro.props;
+const prefix = home ? '' : u('');
+const year = new Date().getFullYear();
+---
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot__brand">
+        <img src={u('img/digital-watch-logo.webp')} width="150" height="115" alt={`לוגו ${SITE.name} (Digital Watch)`} loading="lazy" />
+        <p>מיזם התנדבותי בפיתוח, שנועד לבנות שכבת ערנות אנושית לשיחות וידאו חיות ברשת.</p>
+      </div>
+      <nav aria-label="קישורים באתר">
+        <h2>באתר</h2>
+        <ul>
+          {NAV.map((n) => (
+            <li>
+              <a href={`${prefix}${n.href}`}>{n.label}</a>
+            </li>
+          ))}
+          <li>
+            <a href={`${prefix}#support`}>תמיכה</a>
+          </li>
+        </ul>
+      </nav>
+      <nav aria-label="מידע משפטי ונגישות">
+        <h2>מידע</h2>
+        <ul>
+          <li>
+            <a href={u('privacy/')}>מדיניות פרטיות</a>
+          </li>
+          <li>
+            <a href={u('accessibility/')}>הצהרת נגישות</a>
+          </li>
+          <li>
+            <a href={u('legal/')}>תנאי שימוש ומידע משפטי</a>
+          </li>
+          <li>
+            <a href={LINKS.cic} target="_blank" rel="noopener noreferrer">
+              האתר של <bdi>{SITE.orgShort}</bdi>
+              <Icon name="external" class="ext-ic" />
+              <span class="sr-only"> (נפתח בלשונית חדשה)</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot__legal">
+      <p>
+        © <span id="year">{year}</span> {SITE.orgNameHe} — <bdi>{SITE.orgShort}</bdi> (<bdi>{SITE.orgNameLatin}</bdi>). כל הזכויות שמורות.
+      </p>
+      <p>
+        האתר מיועד למידע בלבד. חומרים של צד שלישי, ובהם כתבות ולוגואים, שייכים לבעליהם. האתר אינו מייצג את צה״ל ואינו מציג אישור או חסות רשמיים של גוף ממשלתי.
+      </p>
+    </div>
+  </div>
+</footer>
+<script>
+  // the build year is already in the page; this keeps it current for long-lived deployments
+  const y = document.getElementById('year');
+  if (y) y.textContent = String(new Date().getFullYear());
+</script>

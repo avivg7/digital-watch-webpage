@@ -1,0 +1,84 @@
+---
+import { LINKS } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="sec sec--dark" id="evidence" aria-labelledby="evidence-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="evidence-title">מה שהתקשורת כבר מראה</h2>
+      <p class="lede measure">הנושא כבר עלה בתקשורת הישראלית. כך מתארים אותו שני גופי תקשורת, ואלה הקישורים לכתבות המלאות.</p>
+    </div>
+
+    <div class="press">
+      <article class="press-card">
+        <p class="press-card__src">
+          רדיו גלי ישראל{' '}
+          <span class="press-card__date">
+            <time datetime="2026-07-23">23 ביולי 2026</time>
+          </span>
+        </p>
+        <h3>עומרי רולס לדני סימן: ״כאשר אויבינו לא מצליחים לנצח בשדה הקרב הפיזי, הפרקטיקה המיידית היא לעבור לשדה הקרב הדיגיטלי״</h3>
+        <p>בראיון אמר רולס כי ״יש תעשייה שלמה שמנסה לצוד את החיילים״, והציג את הצורך לפעול גם בזירה הדיגיטלית.</p>
+        <a href={LINKS.galey} target="_blank" rel="noopener noreferrer">
+          לכתבה המלאה באתר גלי ישראל <Icon name="external" class="ext-ic" />
+          <span class="sr-only"> (נפתח בלשונית חדשה)</span>
+        </a>
+      </article>
+      <article class="press-card">
+        <p class="press-card__src">
+          חדשות 13{' '}
+          <span class="press-card__date">
+            <time datetime="2026-05-16">16 במאי 2026</time>
+          </span>
+        </p>
+        <h3>לייב מעזה ומלבנון, בפנים חשופות: המלכודת שמחכה לחיילים ברשת</h3>
+        <p>תחקיר מיוחד: חיילים עולים לשידור חי באפליקציות וידאו וחושפים מיקומים ואמצעי לחימה, כך לפי תיאור הכתבה.</p>
+        <a href={LINKS.channel13} target="_blank" rel="noopener noreferrer">
+          לכתבה באתר חדשות 13 <Icon name="external" class="ext-ic" />
+          <span class="sr-only"> (נפתח בלשונית חדשה)</span>
+        </a>
+      </article>
+    </div>
+
+    <div class="feature">
+      <div class="feature__art" aria-hidden="true">
+        <svg viewBox="0 0 360 220" fill="none">
+          <rect x="6" y="6" width="348" height="208" rx="18" stroke="rgba(180,195,230,.35)" stroke-width="2" />
+          <g stroke="rgba(111,211,255,.55)" stroke-width="3" stroke-linecap="round">
+            <path d="M40 150h30l12-44 18 80 16-96 16 120 14-70 12 30h40" />
+          </g>
+          <circle cx="262" cy="110" r="46" fill="#0474FC" fill-opacity=".9" />
+          <path d="M252 88v44l38-22-38-22Z" fill="#fff" />
+          <circle cx="40" cy="40" r="7" fill="#FD3E4F" />
+        </svg>
+      </div>
+      <div class="feature__body">
+        <h3>הכתבה המלאה בטלוויזיה</h3>
+        <p>הכתבה המלאה, כפי ששודרה, מציגה את הבעיה בתמונות. היא שייכת לחדשות 13 ולכן אינה מתארחת באתר הזה.</p>
+        <p>
+          <a class="btn btn--light" href={LINKS.channel13} target="_blank" rel="noopener noreferrer">
+            לצפייה בכתבה אצל חדשות 13 <Icon name="external" class="ext-ic" />
+            <span class="sr-only"> (נפתח בלשונית חדשה)</span>
+          </a>
+        </p>
+        <p class="feature__note">הצפייה והזכויות בכתבה הן של חדשות 13.</p>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact fact--exposure">
+        <h3>מידע</h3>
+        <p>מידע שנאמר בשיחה תמימה עלול לקבל תפוצה רחבה.</p>
+      </div>
+      <div class="fact fact--exposure">
+        <h3>חשיפה</h3>
+        <p>פלטפורמות פתוחות מאפשרות לאנשים זרים ליצור קשר במהירות.</p>
+      </div>
+      <div class="fact">
+        <h3>מודעות</h3>
+        <p>הכרת הסיכונים מסייעת להתנהלות בטוחה ואחראית יותר.</p>
+      </div>
+    </div>
+  </div>
+</section>

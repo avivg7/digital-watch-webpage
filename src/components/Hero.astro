@@ -1,0 +1,31 @@
+---
+import Dial from './Dial.astro';
+import { SITE } from '../data/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <h1 id="hero-title">
+        <span class="l1">האיומים לא נשארים בשטח.</span>
+        <span class="l2">גם ההגנה שלנו לא.</span>
+      </h1>
+      <p class="hero__lede">
+        חיילים נכנסים לשיחות וידאו חיות באפליקציות פתוחות, ובשיחה תמימה אחת עלולים להיחשף מיקום, ציוד ופרטים מזהים.
+        <bdi>{SITE.name}</bdi> הוא מיזם התנדבותי, בפיתוח, שנועד לבנות שכבת ערנות אנושית לרגעים האלה.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#support">
+          תמכו במיזם
+        </a>
+        <a class="btn btn--ghost" href="#product">
+          ראו את המערכת
+        </a>
+      </div>
+      <p class="hero__under">
+        <i aria-hidden="true"></i> מיזם של מתנדבים, במסגרת <bdi>{SITE.orgShort}</bdi>
+      </p>
+    </div>
+    <Dial />
+  </div>
+</section>

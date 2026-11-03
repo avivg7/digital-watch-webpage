@@ -1,0 +1,165 @@
+{
+  "desktop-accessibility": {
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 423,
+      "CLS": 0.063,
+      "TBT_ms": 0,
+      "FCP_ms": 403,
+      "SI_ms": 403,
+      "transfer_KB": 144,
+      "lighthouse": "12.8.2",
+      "form": "desktop",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+  },
+  "desktop-home": {
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 464,
+      "CLS": 0.069,
+      "TBT_ms": 0,
+      "FCP_ms": 444,
+      "SI_ms": 444,
+      "transfer_KB": 201,
+      "lighthouse": "12.8.2",
+      "form": "desktop",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+  },
+  "desktop-legal": {
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 409,
+      "CLS": 0,
+      "TBT_ms": 0,
+      "FCP_ms": 409,
+      "SI_ms": 409,
+      "transfer_KB": 142,
+      "lighthouse": "12.8.2",
+      "form": "desktop",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+  },
+  "desktop-privacy": {
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 404,
+      "CLS": 0.02,
+      "TBT_ms": 0,
+      "FCP_ms": 404,
+      "SI_ms": 404,
+      "transfer_KB": 142,
+      "lighthouse": "12.8.2",
+      "form": "desktop",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+  },
+  "mobile-accessibility": {
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 1885,
+      "CLS": 0.0,
+      "TBT_ms": 0,
+      "FCP_ms": 1660,
+      "SI_ms": 1660,
+      "transfer_KB": 144,
+      "lighthouse": "12.8.2",
+      "form": "mobile",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+  },
+  "mobile-home": {
+    "scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 1959,
+      "CLS": 0,
+      "TBT_ms": 0,
+      "FCP_ms": 1509,
+      "SI_ms": 2777,
+      "transfer_KB": 201,
+      "lighthouse": "12.8.2",
+      "form": "mobile",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [
+      ["forced-reflow-insight", "Forced reflow"],
+      ["network-dependency-tree-insight", "Network dependency tree"]
+    ]
+  },
+  "mobile-legal": {
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 1657,
+      "CLS": 0,
+      "TBT_ms": 0,
+      "FCP_ms": 1357,
+      "SI_ms": 1357,
+      "transfer_KB": 142,
+      "lighthouse": "12.8.2",
+      "form": "mobile",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+  },
+  "mobile-privacy": {
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 1735,
+      "CLS": 0,
+      "TBT_ms": 0,
+      "FCP_ms": 1510,
+      "SI_ms": 1510,
+      "transfer_KB": 142,
+      "lighthouse": "12.8.2",
+      "form": "mobile",
+      "throttling": "simulate"
+    },
+    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+  }
+}

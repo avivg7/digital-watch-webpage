@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { u } from '../data/url';
+---
+
+<Base title="העמוד לא נמצא" description="העמוד שחיפשתם לא נמצא." noindex>
+  <div class="doc">
+    <div class="wrap">
+      <div class="doc__head">
+        <h1>העמוד לא נמצא</h1>
+        <p class="lede">ייתכן שהקישור ישן או שהכתובת הוקלדה בטעות.</p>
+      </div>
+      <p>
+        <a class="btn btn--primary" href={u('')}>
+          לעמוד הראשי
+        </a>
+      </p>
+    </div>
+  </div>
+</Base>

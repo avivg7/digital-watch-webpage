@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://avivg7.github.io/digital-watch-webpage/sitemap.xml

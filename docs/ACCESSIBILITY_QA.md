@@ -1,0 +1,62 @@
+# Accessibility QA
+
+Target: **WCAG 2.2 AA** engineering practice, and the Israeli requirements as far as they apply (Equal Rights for Persons with Disabilities Law 1998; the Service Accessibility Regulations 2013, the internet regulation; Israeli Standard 5568). **No claim of compliance is made**: that needs a qualified audit with assistive technology and a lawyer (checklist at the end).
+
+## What was tested
+
+| Check                                                      | How                                                                                                                                                                                                                                                                                             | Result (see `QA_REPORT.md` for the final run)                                                                                                                  |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| axe-core, tags wcag2a, 2aa, 21a, 21aa, 22aa, best-practice | Every route, default state, reduced motion; the home page with the panel open and each of the four adjustments on and text at 150%; the open lightbox                                                                                                                                           | No violations. `color-contrast` is reported **incomplete** on the home page (text over gradients axe cannot sample); the pairs were calculated by hand (below) |
+| Keyboard                                                   | Skip link is the first stop and moves focus to `<main>`; every focused element has a visible outline (45 tab stops); gallery arrows (RTL: ArrowLeft = next), Home, End; lightbox traps focus, Escape closes and returns focus; panel opens, Escape closes and returns focus; mobile menu Escape | Pass (Chromium, Firefox, WebKit engine, two phone profiles)                                                                                                    |
+| Settings really change the page                            | Computed font size rises more than 1.4x at 150%; hero background becomes `rgb(0,0,0)` and the "why" section white in high contrast; the hero animation name becomes `none`; links become underlined; line height rises                                                                          | Pass                                                                                                                                                           |
+| Persistence and reset                                      | Settings survive a reload and appear on every page; reset removes them and the stored key                                                                                                                                                                                                       | Pass                                                                                                                                                           |
+| Announcements                                              | A polite live region announces each change ("קו תחתון לקישורים: פעיל")                                                                                                                                                                                                                          | Pass (text of the region; not heard through a screen reader)                                                                                                   |
+| Reflow and zoom                                            | 320 px with text at 150% (about 400% zoom): no horizontal scroll on any route                                                                                                                                                                                                                   | Pass                                                                                                                                                           |
+| Seven widths x four routes                                 | 320, 390, 768, 1024, 1366, 1440, 1920: no horizontal scroll, images inside the viewport (except the filmstrip, which is a scroll region), CTA at least 44 px high                                                                                                                               | Pass                                                                                                                                                           |
+| Touch targets                                              | Header button, menu button, hero buttons, gallery arrows, zoom, accessibility button and panel buttons are at least 44x44 px                                                                                                                                                                    | Pass                                                                                                                                                           |
+| No JavaScript                                              | Heading, evidence links, navigation and a list of links to the six screenshots are present                                                                                                                                                                                                      | Pass                                                                                                                                                           |
+| Reduced motion                                             | OS setting and panel setting both stop the animation; smooth scrolling off                                                                                                                                                                                                                      | Pass                                                                                                                                                           |
+| Language and direction                                     | `lang="he"`, `dir="rtl"` on every page; Latin names, "CIC" and the URL fragments are isolated with `<bdi>`/`.ltr`                                                                                                                                                                               | Pass (automated attribute checks)                                                                                                                              |
+| Lighthouse accessibility                                   | Mobile and desktop, four routes                                                                                                                                                                                                                                                                 | 100 on every run (lab, simulated)                                                                                                                              |
+
+### Contrast, computed with the WCAG relative-luminance formula (for the pairs axe could not sample)
+
+| Foreground / background                                                         | Ratio       | Needs                                     |
+| ------------------------------------------------------------------------------- | ----------- | ----------------------------------------- |
+| White `#FFFFFF` on navy `#05143F`                                               | 17.82       | 4.5                                       |
+| Page text `#E9F0FF` on navy `#05143F`                                           | 15.59       | 4.5                                       |
+| Cyan `#6FD3FF` on navy `#05143F` (hero second sentence, large text)             | 10.56       | 3                                         |
+| Soft `#B4C3E6` on navy `#05143F` (secondary text on dark)                       | 10.09       | 4.5                                       |
+| Soft `#B4C3E6` on navy-900 `#0B1F52` (press cards)                              | 8.93        | 4.5                                       |
+| Soft `#B4C3E6` on `#1F3A82` (**worst point** of the support section's gradient) | 5.99        | 4.5                                       |
+| White on blue `#0A64E8` (buttons)                                               | 5.25        | 4.5                                       |
+| Ink `#05143F` on paper `#F3F6FB`                                                | 16.45       | 4.5                                       |
+| Muted `#3B4A6B` on paper / on white                                             | 8.15 / 8.83 | 4.5                                       |
+| Link `#0A58CA` on paper                                                         | 5.94        | 4.5                                       |
+| High contrast: black on yellow `#FFE600`, and yellow on black                   | 16.57       | 4.5                                       |
+| Coral `#FD3E4F` on navy                                                         | 5.07        | not used for text (rule, dot, icons only) |
+
+These are calculations from the colour values in `src/styles/global.css`, not measurements of rendered pixels; the Lighthouse and axe runs found no failing contrast, and axe lists the gradient areas as "incomplete" because it cannot sample them.
+
+## What was NOT tested
+
+- **No screen reader** (VoiceOver, NVDA, JAWS, TalkBack) was used; announcements were checked as text in the live region only.
+- **Safari itself** was not run. "WebKit" in the tests is Playwright's WebKit build, not the Safari application; on macOS, Safari only Tabs onto links if the user enables it, so the skip-link test focuses the link directly in WebKit.
+- **No real touch device** and no real zoom to 400% on a desktop browser (it is emulated by a 320 px viewport with 150% text).
+- **Dyslexia, cognitive and low-vision users** were not involved; high-contrast mode was checked by script and by eye only.
+- Windows forced-colours mode has CSS rules but was **not** run.
+
+## Known gaps (also disclosed on `/accessibility/`)
+
+1. Screenshots are images; their small text is described in the alternative text and caption, not reproduced.
+2. The lightbox does not support pinch-zoom beyond the browser's own.
+3. The hero dial is decorative and carries a single description; its numbers are not exposed.
+4. External pages (press, CIC) are outside our control.
+5. No accessibility coordinator is named (owner action O-7).
+
+## Before anyone relies on this: checklist for a qualified review
+
+- [ ] Audit with at least two screen readers on two platforms; keyboard-only and switch access
+- [ ] Contrast and focus review in Windows forced-colours mode
+- [ ] Native Hebrew speaker review of reading order and the announcements
+- [ ] Lawyer review of the statement text against Israeli requirements (owner action O-8)

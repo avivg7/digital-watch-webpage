@@ -1,0 +1,31 @@
+---
+import Base from './Base.astro';
+import { SITE } from '../data/site';
+import { u } from '../data/url';
+import Icon from '../components/Icon.astro';
+interface Props {
+  title: string;
+  description: string;
+  updated?: boolean;
+}
+const { title, description, updated = true } = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <div class="doc">
+    <div class="wrap">
+      <a class="back" href={u('')}>
+        <Icon name="next" class="ext-ic" /> חזרה לעמוד הראשי
+      </a>
+      <div class="doc__head">
+        <h1>{title}</h1>
+        {updated && (
+          <p class="meta">
+            עודכן לאחרונה: <time datetime={SITE.updatedISO}>{SITE.updated}</time>
+          </p>
+        )}
+      </div>
+      <slot />
+    </div>
+  </div>
+</Base>
