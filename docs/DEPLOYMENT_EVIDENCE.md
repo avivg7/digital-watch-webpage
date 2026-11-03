@@ -2,14 +2,14 @@
 
 ## Status: **NOT DEPLOYED. BLOCKED on one permission step.**
 
-| Item                       | State                                                                                                                         |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Local git repository       | Created in this folder, branch `main`, working tree clean. Final local commit: **recorded in section 3**                      |
-| GitHub repository          | **Not created.** `avivg7/digital-watch-webpage` does not exist (checked with `gh repo view` after the block)                  |
-| GitHub Pages               | **Not enabled**                                                                                                               |
-| CI run                     | **None** (nothing has been pushed)                                                                                            |
-| Live URL                   | **None.** The intended URL is `https://avivg7.github.io/digital-watch-webpage/`; it does not exist yet                        |
-| The Digital Watch app repo | **Untouched.** It was opened read-only for two brand files and its colour tokens; no remote, branch or file of it was changed |
+| Item                       | State                                                                                                                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Local git repository       | Created in this folder, branch `main`, working tree clean. The final local commit is whatever `git rev-parse HEAD` prints (a document cannot contain its own commit's SHA); it is also given in the batch's final report |
+| GitHub repository          | **Not created.** `avivg7/digital-watch-webpage` does not exist (checked with `gh repo view` after the block)                                                                                                             |
+| GitHub Pages               | **Not enabled**                                                                                                                                                                                                          |
+| CI run                     | **None** (nothing has been pushed)                                                                                                                                                                                       |
+| Live URL                   | **None.** The intended URL is `https://avivg7.github.io/digital-watch-webpage/`; it does not exist yet                                                                                                                   |
+| The Digital Watch app repo | **Untouched.** It was opened read-only for two brand files and its colour tokens; no remote, branch or file of it was changed                                                                                            |
 
 ## What was blocked, and why it matters
 
