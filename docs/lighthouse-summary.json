@@ -11,33 +11,27 @@
       "CLS": 0.063,
       "TBT_ms": 0,
       "FCP_ms": 403,
-      "SI_ms": 403,
-      "transfer_KB": 144,
+      "transfer_KB": 147,
       "lighthouse": "12.8.2",
-      "form": "desktop",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   },
   "desktop-home": {
     "scores": {
-      "performance": 99,
+      "performance": 100,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 464,
-      "CLS": 0.069,
+      "LCP_ms": 466,
+      "CLS": 0,
       "TBT_ms": 0,
-      "FCP_ms": 444,
-      "SI_ms": 444,
-      "transfer_KB": 201,
+      "FCP_ms": 406,
+      "transfer_KB": 205,
       "lighthouse": "12.8.2",
-      "form": "desktop",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   },
   "desktop-legal": {
     "scores": {
@@ -47,17 +41,14 @@
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 409,
+      "LCP_ms": 467,
       "CLS": 0,
       "TBT_ms": 0,
-      "FCP_ms": 409,
-      "SI_ms": 409,
-      "transfer_KB": 142,
+      "FCP_ms": 407,
+      "transfer_KB": 146,
       "lighthouse": "12.8.2",
-      "form": "desktop",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   },
   "desktop-privacy": {
     "scores": {
@@ -67,17 +58,14 @@
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 404,
+      "LCP_ms": 423,
       "CLS": 0.02,
       "TBT_ms": 0,
-      "FCP_ms": 404,
-      "SI_ms": 404,
-      "transfer_KB": 142,
+      "FCP_ms": 403,
+      "transfer_KB": 145,
       "lighthouse": "12.8.2",
-      "form": "desktop",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   },
   "mobile-accessibility": {
     "scores": {
@@ -87,60 +75,48 @@
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 1885,
+      "LCP_ms": 1878,
       "CLS": 0.0,
       "TBT_ms": 0,
-      "FCP_ms": 1660,
-      "SI_ms": 1660,
-      "transfer_KB": 144,
+      "FCP_ms": 1653,
+      "transfer_KB": 147,
       "lighthouse": "12.8.2",
-      "form": "mobile",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   },
   "mobile-home": {
     "scores": {
-      "performance": 98,
+      "performance": 99,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 1959,
-      "CLS": 0,
+      "LCP_ms": 1806,
+      "CLS": 0.0,
       "TBT_ms": 0,
-      "FCP_ms": 1509,
-      "SI_ms": 2777,
-      "transfer_KB": 201,
+      "FCP_ms": 1656,
+      "transfer_KB": 205,
       "lighthouse": "12.8.2",
-      "form": "mobile",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [
-      ["forced-reflow-insight", "Forced reflow"],
-      ["network-dependency-tree-insight", "Network dependency tree"]
-    ]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   },
   "mobile-legal": {
     "scores": {
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 1657,
+      "LCP_ms": 1879,
       "CLS": 0,
       "TBT_ms": 0,
-      "FCP_ms": 1357,
-      "SI_ms": 1357,
-      "transfer_KB": 142,
+      "FCP_ms": 1654,
+      "transfer_KB": 146,
       "lighthouse": "12.8.2",
-      "form": "mobile",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   },
   "mobile-privacy": {
     "scores": {
@@ -150,16 +126,13 @@
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 1735,
+      "LCP_ms": 1733,
       "CLS": 0,
       "TBT_ms": 0,
-      "FCP_ms": 1510,
-      "SI_ms": 1510,
-      "transfer_KB": 142,
+      "FCP_ms": 1508,
+      "transfer_KB": 145,
       "lighthouse": "12.8.2",
-      "form": "mobile",
-      "throttling": "simulate"
-    },
-    "audits_below_90": [["network-dependency-tree-insight", "Network dependency tree"]]
+      "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
   }
 }

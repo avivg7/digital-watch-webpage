@@ -32,7 +32,11 @@ http
   .createServer((req, res) => {
     const url = new URL(req.url, 'http://x');
     let p = decodeURIComponent(url.pathname);
-    if (!p.startsWith(BASE)) return send(res, 404, path.join(ROOT, '404.html'));
+    // outside the project path GitHub Pages answers with ITS OWN 404, never with this site's 404.html
+    if (!p.startsWith(BASE)) {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return res.end('Not Found');
+    }
     p = p.slice(BASE.length);
     let file = path.join(ROOT, p);
     if (!file.startsWith(ROOT)) return send(res, 404, path.join(ROOT, '404.html'));

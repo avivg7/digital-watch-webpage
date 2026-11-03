@@ -12,7 +12,7 @@ A static, Hebrew-first (RTL) landing site for **Digital Watch / המשמר הד�
 
 Astro 7 (static output), TypeScript, hand-written CSS with design tokens, three small client scripts (navigation, accessibility panel, gallery) and no UI framework. Heebo is self-hosted. Playwright and axe-core for tests; sharp for the image pipeline.
 
-Node: the repository pins `node@22.23.4` as a dev dependency so `npm run …` uses it, because Astro 7 needs a newer 22.x than some machines have. CI uses `.nvmrc`.
+Node: Astro 7 needs Node 22.23.4 or newer (`engines`, `.nvmrc`; CI uses `.nvmrc`). If your Node is older and you cannot upgrade, `npm install --no-save node@22.23.4` puts a matching binary in `node_modules/.bin` for `npm run …` without touching `package.json`. CI installs with `--ignore-scripts`.
 
 ## Commands
 

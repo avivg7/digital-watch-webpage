@@ -1759,3 +1759,15 @@ ul.support__ways strong {
 html[data-motion='reduce'] .sw::after {
   transition: none;
 }
+
+.seg {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.seg button {
+  padding-inline: 0.2rem;
+  font-size: 0.95rem;
+  min-width: 0;
+}
+dialog.lightbox {
+  background: #02081c;
+}

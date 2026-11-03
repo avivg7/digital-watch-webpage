@@ -83,4 +83,28 @@ test.describe('accessibility panel', () => {
     await expect(page.locator('html')).toHaveAttribute('data-text', '1');
     await expect(page.locator('#a11y-open')).toBeVisible();
   });
+
+  test('the visible state word of a switch changes from "כבוי" to "פעיל" and back', async ({ page }) => {
+    await page.locator('#a11y-open').click();
+    const t = page.locator('[data-toggle="contrast"]');
+    await expect(t.locator('.st__t')).toHaveText('כבוי');
+    await t.click();
+    await expect(t.locator('.st__t')).toHaveText('פעיל');
+    await t.click();
+    await expect(t.locator('.st__t')).toHaveText('כבוי');
+  });
+
+  test('with 150% text on a phone the four size buttons all fit inside the panel', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await page.locator('#a11y-open').click();
+    await page.locator('[data-size="3"]').click();
+    const fit = await page.evaluate(() => {
+      const p = document.querySelector('#a11y-panel')!.getBoundingClientRect();
+      return Array.from(document.querySelectorAll('[data-size]')).every((b) => {
+        const r = b.getBoundingClientRect();
+        return r.left >= p.left - 1 && r.right <= p.right + 1;
+      });
+    });
+    expect(fit).toBe(true);
+  });
 });

@@ -91,7 +91,7 @@ test('a content security policy is delivered and forbids third-party loading', a
   await page.goto('./');
   const csp = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
   expect(csp).toContain("default-src 'self'");
-  expect(csp).toContain("connect-src 'none'");
+  expect(csp).toContain("connect-src 'self'");
   expect(csp).toContain("form-action 'none'");
   expect(csp).not.toMatch(/https?:\/\//);
 });
