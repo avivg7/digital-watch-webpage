@@ -16,7 +16,8 @@
     "verify:public": "node scripts/verify-public-tree.mjs",
     "test": "playwright test",
     "test:links": "node scripts/check-external-links.mjs",
-    "serve": "node scripts/serve-dist.mjs"
+    "serve": "node scripts/serve-dist.mjs",
+    "check:live": "node scripts/check-live.mjs"
   },
   "dependencies": {
     "@fontsource-variable/heebo": "5.3.0",
