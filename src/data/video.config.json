@@ -1,0 +1,30 @@
+{
+  "_readme": "Featured video configuration. Read by src/components/FeaturedVideo.astro AND by scripts/verify-public-tree.mjs and scripts/prepare-report-video.mjs. See docs/FEATURED_VIDEO.md. Do NOT set mode to 'report' until rights.confirmedBy, confirmedOn and reference are filled in with the owner's written confirmation.",
+  "mode": "demo",
+  "rights": {
+    "id": "R-1",
+    "status": "LINKED_ONLY_RIGHTS_PENDING",
+    "officialEmbed": "none verified (web search 2026-11-03 found no official playable copy; the publisher page refuses automated requests and that was respected)",
+    "confirmedBy": "",
+    "confirmedOn": "",
+    "reference": ""
+  },
+  "demo": {
+    "mp4": "video/demo/dw-player-demo.mp4",
+    "webm": "video/demo/dw-player-demo.webm",
+    "poster": "video/demo/dw-player-demo-poster.webp",
+    "captions": "video/demo/dw-player-demo.he.vtt",
+    "durationLabel": "0:09",
+    "width": 1280,
+    "height": 720
+  },
+  "report": {
+    "mp4": "video/report/dw-report.mp4",
+    "webm": "video/report/dw-report.webm",
+    "poster": "video/report/dw-report-poster.webp",
+    "captions": "video/report/dw-report.he.vtt",
+    "durationLabel": "",
+    "width": 1280,
+    "height": 720
+  }
+}

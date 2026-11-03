@@ -20,11 +20,34 @@ const TYPES = {
   '.jpg': 'image/jpeg',
   '.woff2': 'font/woff2',
   '.svg': 'image/svg+xml',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.vtt': 'text/vtt; charset=utf-8',
 };
 
-const send = (res, code, file) => {
+const send = (res, code, file, req) => {
   const ext = path.extname(file);
-  res.writeHead(code, { 'Content-Type': TYPES[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+  const type = TYPES[ext] || 'application/octet-stream';
+  const size = fs.statSync(file).size;
+  // GitHub Pages answers byte-range requests (video seeking, Safari playback depend on them), so this server does too
+  const range = code === 200 && req && /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+  if (range) {
+    const start = range[1] === '' ? Math.max(0, size - Number(range[2])) : Number(range[1]);
+    const end = range[1] === '' || range[2] === '' ? size - 1 : Math.min(Number(range[2]), size - 1);
+    if (start > end || start >= size) {
+      res.writeHead(416, { 'Content-Range': `bytes */${size}` });
+      return res.end();
+    }
+    res.writeHead(206, {
+      'Content-Type': type,
+      'Accept-Ranges': 'bytes',
+      'Content-Range': `bytes ${start}-${end}/${size}`,
+      'Content-Length': end - start + 1,
+      'Cache-Control': 'no-cache',
+    });
+    return fs.createReadStream(file, { start, end }).pipe(res);
+  }
+  res.writeHead(code, { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Length': size, 'Cache-Control': 'no-cache' });
   fs.createReadStream(file).pipe(res);
 };
 
@@ -39,7 +62,7 @@ http
     }
     p = p.slice(BASE.length);
     let file = path.join(ROOT, p);
-    if (!file.startsWith(ROOT)) return send(res, 404, path.join(ROOT, '404.html'));
+    if (!file.startsWith(ROOT)) return send(res, 404, path.join(ROOT, '404.html'), req);
     if (fs.existsSync(file) && fs.statSync(file).isDirectory()) {
       if (!url.pathname.endsWith('/')) {
         res.writeHead(301, { Location: url.pathname + '/' });
@@ -47,7 +70,7 @@ http
       }
       file = path.join(file, 'index.html');
     }
-    if (fs.existsSync(file) && fs.statSync(file).isFile()) return send(res, 200, file);
-    return send(res, 404, path.join(ROOT, '404.html'));
+    if (fs.existsSync(file) && fs.statSync(file).isFile()) return send(res, 200, file, req);
+    return send(res, 404, path.join(ROOT, '404.html'), req);
   })
   .listen(PORT, '127.0.0.1', () => console.log(`serving dist at http://127.0.0.1:${PORT}${BASE}`));

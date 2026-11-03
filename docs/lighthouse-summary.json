@@ -76,7 +76,7 @@
     },
     "metrics": {
       "LCP_ms": 1878,
-      "CLS": 0.0,
+      "CLS": 0,
       "TBT_ms": 0,
       "FCP_ms": 1653,
       "transfer_KB": 147,
@@ -93,7 +93,7 @@
     },
     "metrics": {
       "LCP_ms": 1806,
-      "CLS": 0.0,
+      "CLS": 0,
       "TBT_ms": 0,
       "FCP_ms": 1656,
       "transfer_KB": 205,
@@ -133,6 +133,40 @@
       "transfer_KB": 145,
       "lighthouse": "12.8.2",
       "note": "lab run against a local static server that mimics GitHub Pages; simulated throttling; not field data"
+    }
+  },
+  "home-with-video-section-mobile": {
+    "scores": {
+      "performance": 97,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 2180,
+      "CLS": 0,
+      "TBT_ms": 0,
+      "transfer_KB": 218,
+      "video_requests_on_load": 0,
+      "lighthouse": "12.8.2",
+      "note": "lab run after the featured-video section was added; local static server mimicking GitHub Pages; simulated throttling; not field data"
+    }
+  },
+  "home-with-video-section-desktop": {
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP_ms": 524,
+      "CLS": 0.069,
+      "TBT_ms": 0,
+      "transfer_KB": 218,
+      "video_requests_on_load": 0,
+      "lighthouse": "12.8.2",
+      "note": "lab run after the featured-video section was added; local static server mimicking GitHub Pages; simulated throttling; not field data"
     }
   }
 }

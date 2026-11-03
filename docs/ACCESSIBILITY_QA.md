@@ -60,3 +60,14 @@ These are calculations from the colour values in `src/styles/global.css`, not me
 - [ ] Contrast and focus review in Windows forced-colours mode
 - [ ] Native Hebrew speaker review of reading order and the announcements
 - [ ] Lawyer review of the statement text against Israeli requirements (owner action O-8)
+
+## Featured video (added later)
+
+| Area                    | Check                                                                                                                                                                                                                     | Result                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Keyboard                | Enter on the Play button opens the modal; focus never reaches the page behind it; Escape closes and focus returns to Play; native video controls are keyboard operable                                                    | Pass (automated, three engines)                                      |
+| Screen reader semantics | Play is a real button with a visible-text name; the modal is a native `dialog` named by its title; the failure panel is `role="alert"`; the article link says it opens a new tab and that it is an article, not the video | Pass (structure by axe and tests; **no real screen reader was run**) |
+| Captions                | Hebrew caption track (`kind=captions`) on the demo, which describes the on-screen text (the demo is silent). **The real report must ship with Hebrew captions before it is hosted** (V-3)                                 | Pass for the demo; open for the report                               |
+| Motion                  | The ping, hover lift and dialog entrance stop with the OS setting and with the panel's motion setting. No autoplay on load; playback starts only after the visitor presses Play                                           | Pass                                                                 |
+| Contrast                | axe finds 0 violations on the section and the open dialog, default and high contrast                                                                                                                                      | Pass                                                                 |
+| Touch                   | Play button at least 64 px, dialog buttons at least 44 px high, phones get a full-screen dialog                                                                                                                           | Pass                                                                 |

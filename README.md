@@ -28,6 +28,10 @@ npm run test:links     # checks the external links and reports verified / blocke
 npm run assets         # rebuilds public/img from ./assets (the owner's originals; not in git)
 ```
 
+## Featured video
+
+The video section plays an original, labelled **demo** while the rights to the Channel 13 report are pending. How it works, the guard rails and the switch to the real report: `docs/FEATURED_VIDEO.md`. Commands: `npm run video:demo` (re-render the demo), `npm run video:prepare -- <file>` (refuses until rights are recorded in `src/data/video.config.json`).
+
 ## Layout
 
 ```
