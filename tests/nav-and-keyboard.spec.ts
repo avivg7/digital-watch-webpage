@@ -87,11 +87,15 @@ test('phone menu closes when the visitor taps outside it', async ({ page, isMobi
   await expect(page.locator('#site-nav')).toBeHidden();
 });
 
-test('a content security policy is delivered and forbids third-party loading', async ({ page }) => {
+test('a content security policy is delivered and allows exactly one third-party origin: the privacy-enhanced YouTube embed, as a frame', async ({ page }) => {
   await page.goto('./');
   const csp = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
   expect(csp).toContain("default-src 'self'");
   expect(csp).toContain("connect-src 'self'");
   expect(csp).toContain("form-action 'none'");
-  expect(csp).not.toMatch(/https?:\/\//);
+  // the only external origin the policy names is the YouTube privacy-enhanced embed host, and only for frames
+  expect(csp!.match(/https?:\/\/[^\s;]+/g)).toEqual(['https://www.youtube-nocookie.com']);
+  expect(csp).toContain('frame-src https://www.youtube-nocookie.com;');
+  for (const d of ['script-src', 'img-src', 'connect-src', 'style-src', 'font-src'])
+    expect(csp!.split(';').find((x) => x.trim().startsWith(d))).not.toMatch(/youtube|https?:/);
 });

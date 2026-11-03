@@ -38,9 +38,8 @@ test('privacy and rights guards: no form, no video, no mailto, no e-mail or phon
     expect(await page.locator('a[href^="mailto:"], a[href^="tel:"]').count(), `${route}: mailto/tel`).toBe(0);
     const html = await page.content();
     expect(html, `${route}: e-mail address in page`).not.toMatch(/[\w.+-]+@[\w-]+\.[\w.-]+/);
-    // the only media the page may name is the first-party player demo (docs/FEATURED_VIDEO.md); never the source recording or any other file
-    const media = html.match(/[\w./-]+\.(mp4|mov|webm|m4v)\b/gi) ?? [];
-    for (const m of media) expect(m, `${route}: video file reference`).toMatch(/\/video\/demo\/dw-player-demo\.(mp4|webm)$/);
+    // no media file of any kind is named by a page (the report is an embed of the owner's YouTube upload, created only after a click)
+    expect(html, `${route}: media file reference`).not.toMatch(/\.(mp4|mov|webm|m4v|mp3|m4a)\b/i);
     expect(html, `${route}: source recording name`).not.toMatch(/7F0744CB/i);
   }
   await page.goto('./');
@@ -128,10 +127,9 @@ test('JavaScript off: the message, the evidence links, the navigation and a way 
   await expect(page.locator('a[href*="gly.co.il"]').first()).toBeVisible();
   await expect(page.locator('nav.nav a').first()).toBeVisible();
   await expect(page.locator('.nojs-list a')).toHaveCount(6);
-  // without JavaScript the inert Play button is hidden and a direct file link takes its place
+  // without JavaScript the inert Play button is hidden and a plain link to the same YouTube video takes its place
   await expect(page.locator('.vid__poster')).toBeHidden();
-  await expect(page.locator('.vid__nojs a')).toHaveAttribute('href', /\/video\/demo\/dw-player-demo\.mp4$/);
-  await expect(page.locator('.vid__article a')).toHaveAttribute('href', /13tv\.co\.il/);
+  await expect(page.locator('.vid__nojs a')).toHaveAttribute('href', 'https://www.youtube.com/watch?v=DBdZiXJb9OI');
   await expect(page.locator('.filmstrip')).toBeHidden();
   await expect(page.locator('.menu-toggle')).toBeHidden();
   await ctx.close();

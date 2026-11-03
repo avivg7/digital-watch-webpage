@@ -30,7 +30,7 @@ npm run assets         # rebuilds public/img from ./assets (the owner's original
 
 ## Featured video
 
-The video section plays an original, labelled **demo** while the rights to the Channel 13 report are pending. How it works, the guard rails and the switch to the real report: `docs/FEATURED_VIDEO.md`. Commands: `npm run video:demo` (re-render the demo), `npm run video:prepare -- <file>` (refuses until rights are recorded in `src/data/video.config.json`).
+The `#video` section is a click-to-load **YouTube embed** (privacy-enhanced domain) of the owner's upload of the Channel 13 report; nothing from YouTube loads before Play. Evidence of real playback, privacy/CSP changes, limits and the unresolved rights question: `docs/FEATURED_VIDEO.md`. The video ID lives in `src/data/video.config.json` and `LINKS.youtube`. Live playback test (opt-in, needs internet): `DW_LIVE=1 npx playwright test tests/youtube-live.spec.ts --workers=1`.
 
 ## Layout
 

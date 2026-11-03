@@ -147,9 +147,9 @@
       "CLS": 0,
       "TBT_ms": 0,
       "transfer_KB": 218,
-      "video_requests_on_load": 0,
+      "third_party_requests_on_load": 0,
       "lighthouse": "12.8.2",
-      "note": "lab run after the featured-video section was added; local static server mimicking GitHub Pages; simulated throttling; not field data"
+      "note": "lab run with the YouTube click-to-load section; local static server mimicking GitHub Pages; simulated throttling; not field data"
     }
   },
   "home-with-video-section-desktop": {
@@ -160,13 +160,13 @@
       "seo": 100
     },
     "metrics": {
-      "LCP_ms": 524,
+      "LCP_ms": 525,
       "CLS": 0.069,
       "TBT_ms": 0,
       "transfer_KB": 218,
-      "video_requests_on_load": 0,
+      "third_party_requests_on_load": 0,
       "lighthouse": "12.8.2",
-      "note": "lab run after the featured-video section was added; local static server mimicking GitHub Pages; simulated throttling; not field data"
+      "note": "lab run with the YouTube click-to-load section; local static server mimicking GitHub Pages; simulated throttling; not field data"
     }
   }
 }

@@ -29,10 +29,10 @@ const fullTitle = home ? title : `${title} | ${SITE.name}`;
     <meta name="description" content={description} />
     <meta name="theme-color" content="#05143F" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <!-- GitHub Pages cannot send security headers, so the policy is delivered as a meta tag: it keeps the "nothing third-party is loaded" promise enforceable by the browser. The site needs inline script/style (the pre-paint settings script, Astro's inline CSS). -->
+    <!-- GitHub Pages cannot send security headers, so the policy is delivered as a meta tag: it keeps the "nothing third-party is loaded until the visitor presses Play" promise enforceable by the browser. The ONLY third-party origin allowed is the YouTube privacy-enhanced embed, as a frame. The site needs inline script/style (the pre-paint settings script, Astro's inline CSS). -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-src https://www.youtube-nocookie.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
     />
     {noindex ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index,follow" />}
     <link rel="canonical" href={canonical} />

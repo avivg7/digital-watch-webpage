@@ -19,6 +19,9 @@ export const LINKS = {
   galey: 'https://gly.co.il/item?id=71212',
   // VERIFIED (fetched with a plain User-Agent: HTTP 200, headline and description read, published 2026-05-16): claim register C-04. The publisher answered 403 to an earlier request with a different User-Agent.
   channel13: 'https://13tv.co.il/item/news/politics/security/soldiers-905155535/',
+  // The owner's upload of the report (oEmbed answered 200 on 2026-11-03: public and embeddable). Same video ID as src/data/video.config.json.
+  youtube: 'https://www.youtube.com/watch?v=DBdZiXJb9OI',
+  googlePrivacy: 'https://policies.google.com/privacy',
   govAccessibility: 'https://www.gov.il/he/pages/website_accessibility',
   govDeclaration: 'https://www.gov.il/he/pages/declaration_website_accessibility',
   githubPrivacy: 'https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement',

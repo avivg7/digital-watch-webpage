@@ -13,8 +13,6 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "assets": "node scripts/build-assets.mjs",
-    "video:demo": "node scripts/build-demo-video.mjs",
-    "video:prepare": "node scripts/prepare-report-video.mjs",
     "verify:public": "node scripts/verify-public-tree.mjs",
     "test": "playwright test",
     "test:links": "node scripts/check-external-links.mjs",

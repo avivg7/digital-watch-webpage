@@ -1,44 +1,18 @@
 ---
-// Featured video: a large 16:9 poster that opens an accessible modal player. NOTHING video-related is requested until the visitor chooses to play.
-// Two modes (src/data/video.config.json, docs/FEATURED_VIDEO.md):
-//   demo   (default) an original first-party player demo. Labelled as such everywhere. The Channel 13 report is NOT hosted (rights pending, R-1).
-//   report the report itself, only after the owner's written rights confirmation is recorded in the config (the build refuses otherwise).
+// Featured report video: a large 16:9 poster that opens an accessible modal player. The poster is original local artwork, so NOTHING from YouTube (no script, frame,
+// image or request) is loaded until the visitor presses Play. On Play, one iframe of the YouTube privacy-enhanced embed is created inside the dialog; on close it is removed.
+// The video is the owner's upload of a Channel 13 report (src/data/video.config.json). Embedding it is not evidence of republication rights: see docs/FEATURED_VIDEO.md.
 import cfg from '../data/video.config.json';
 import { LINKS } from '../data/site';
-import { u } from '../data/url';
 import Icon from './Icon.astro';
 
-const mode = cfg.mode === 'report' ? 'report' : 'demo';
-const isReport = mode === 'report';
-if (isReport && !(cfg.rights.confirmedBy && cfg.rights.confirmedOn && cfg.rights.reference)) {
-  throw new Error('video.config.json: mode "report" needs rights.confirmedBy, rights.confirmedOn and rights.reference (docs/FEATURED_VIDEO.md)');
+const media = { id: cfg.id, host: cfg.embedHost, title: cfg.title, watch: cfg.watchUrl };
+if (cfg.watchUrl !== `https://www.youtube.com/watch?v=${cfg.id}` || LINKS.youtube !== cfg.watchUrl) {
+  throw new Error('video.config.json and LINKS.youtube must point at the same YouTube video ID');
 }
-const src = cfg[mode];
-const copy = isReport
-  ? {
-      lede: 'צפו בתחקיר שממחיש מדוע נדרשת שכבת מודעות והגנה גם במרחב הדיגיטלי.',
-      cta: 'לצפייה בתחקיר המלא',
-      badge: 'תחקיר חדשות 13',
-      dialogTitle: 'התחקיר המלא של חדשות 13',
-      note: 'התחקיר הוא של חדשות 13 ומוצג כאן באישור בעלי הזכויות.',
-    }
-  : {
-      lede: 'התחקיר של חדשות 13 ממחיש מדוע נדרשת שכבת מודעות והגנה גם במרחב הדיגיטלי. עד שפרסומו כאן יאושר, הנגן מציג סרטון הדגמה מקורי של האתר.',
-      cta: 'הפעלת הדגמת הנגן',
-      badge: 'הדגמת נגן · לא התחקיר',
-      dialogTitle: 'הדגמת נגן: סרטון הדגמה מקורי של האתר',
-      note: 'הסרטון בנגן הוא הדגמה מקורית של האתר ואינו התחקיר של חדשות 13. התחקיר עצמו שייך לחדשות 13 ואינו מתארח כאן.',
-    };
-const media = {
-  h264: u(src.mp4),
-  vp9: u(src.webm),
-  poster: u(src.poster),
-  captions: src.captions ? u(src.captions) : '',
-  title: copy.dialogTitle,
-};
 ---
 
-<section class="sec sec--navy2 vid" id="video" aria-labelledby="video-title" data-video-mode={mode}>
+<section class="sec sec--navy2 vid" id="video" aria-labelledby="video-title">
   <div class="wrap">
     <div class="vid__head">
       <h2 id="video-title">
@@ -46,7 +20,7 @@ const media = {
         <span>רגע אחד של חוסר תשומת לב.</span>
         <span class="vid__exposed">מידע שלא היה אמור להיחשף.</span>
       </h2>
-      <p class="lede measure">{copy.lede}</p>
+      <p class="lede measure">צפו בתחקיר שממחיש מדוע נדרשת שכבת מודעות והגנה גם במרחב הדיגיטלי.</p>
     </div>
 
     <div class="vid__stage">
@@ -93,30 +67,23 @@ const media = {
         </svg>
         <span class="vid__shade" aria-hidden="true"></span>
         <span class="vid__badge" aria-hidden="true">
-          {copy.badge}
+          תחקיר · חדשות 13
         </span>
         <span class="vid__play" aria-hidden="true">
           <Icon name="play" />
         </span>
         <span class="vid__bar">
-          <span class="vid__cta">{copy.cta}</span>
-          {src.durationLabel && (
-            <span class="vid__dur">
-              <span class="sr-only">משך </span>
-              <bdi>{src.durationLabel}</bdi>
-            </span>
-          )}
+          <span class="vid__cta">לצפייה בתחקיר המלא</span>
         </span>
       </button>
     </div>
 
     <div class="vid__meta">
-      <p class="vid__note">{copy.note}</p>
+      <p class="vid__note">התחקיר של חדשות 13 מוצג כאן בהטמעה מיוטיוב. הוא נטען רק לאחר לחיצה על הפעלה, והזכויות בו שמורות לבעליהן.</p>
       <p class="vid__article">
-        <span class="vid__article-k">הכתבה באתר חדשות 13 (קישור לאתר, לא לסרטון):</span>
-        <a href={LINKS.channel13} target="_blank" rel="noopener noreferrer">
-          לכתבה באתר חדשות 13 <Icon name="external" class="ext-ic" />
-          <span class="sr-only"> (נפתח בלשונית חדשה)</span>
+        <a href={LINKS.youtube} target="_blank" rel="noopener noreferrer">
+          לצפייה ביוטיוב <Icon name="external" class="ext-ic" />
+          <span class="sr-only"> (נפתח בלשונית חדשה, אותו סרטון)</span>
         </a>
       </p>
     </div>
@@ -124,7 +91,7 @@ const media = {
     <noscript>
       <p class="vid__nojs">
         הנגן דורש JavaScript.
-        <a href={media.h264}>{isReport ? 'פתיחת הסרטון בקובץ נפרד' : 'פתיחת סרטון ההדגמה בקובץ נפרד'}</a>
+        <a href={LINKS.youtube}>לצפייה בתחקיר ביוטיוב</a>
       </p>
     </noscript>
   </div>
@@ -133,13 +100,9 @@ const media = {
     <div class="vdlg__in">
       <div class="vdlg__top">
         <p class="vdlg__title" id="vdlg-title">
-          {copy.dialogTitle}
+          התחקיר המלא: כתבה בערוץ 13
         </p>
         <div class="vdlg__tools">
-          <button type="button" class="btn btn--ghost" data-video-fs hidden>
-            <Icon name="expand" />
-            <span>מסך מלא</span>
-          </button>
           <button type="button" class="btn btn--ghost" data-video-close>
             <Icon name="close" />
             <span>סגירה</span>
@@ -148,97 +111,94 @@ const media = {
       </div>
       <div class="vdlg__frame" data-video-frame>
         <div class="vdlg__err" data-video-err role="alert" hidden>
-          <p class="vdlg__err-t">הסרטון לא נטען.</p>
-          <p>אפשר לנסות שוב, או לסגור את החלון. החיבור לרשת או הדפדפן עלולים למנוע את ההפעלה.</p>
+          <p class="vdlg__err-t">הסרטון לא נטען כאן.</p>
+          <p>החיבור לרשת, חסימה בדפדפן או הגבלה של יוטיוב עלולים למנוע את ההפעלה. אפשר לנסות שוב או לצפות בו ישירות ביוטיוב.</p>
           <p class="vdlg__err-a">
-            <button type="button" class="btn btn--light" data-video-retry>
+            <a class="btn btn--light" href={LINKS.youtube} target="_blank" rel="noopener noreferrer">
+              לצפייה ביוטיוב
+              <Icon name="external" class="ext-ic" />
+              <span class="sr-only"> (נפתח בלשונית חדשה, אותו סרטון)</span>
+            </a>
+            <button type="button" class="btn btn--ghost" data-video-retry>
               ניסיון נוסף
             </button>
-            <a class="btn btn--ghost" href={LINKS.channel13} target="_blank" rel="noopener noreferrer">
-              הכתבה באתר חדשות 13
-              <Icon name="external" class="ext-ic" />
-              <span class="sr-only"> (נפתח בלשונית חדשה, קישור לכתבה ולא לסרטון)</span>
-            </a>
           </p>
         </div>
       </div>
-      <p class="vdlg__note">{copy.note}</p>
+      <div class="vdlg__foot">
+        <p class="vdlg__note">
+          הסרטון נטען מיוטיוב (Google) רק עכשיו, בלחיצתכם. אם הוא לא מתנגן,
+          <a href={LINKS.youtube} target="_blank" rel="noopener noreferrer">
+            לצפייה ביוטיוב.<span class="sr-only"> (נפתח בלשונית חדשה)</span>
+          </a>
+          <span class="sr-only">
+            {' '}
+            לסגירה: Escape, או הכפתור ״סגירת הנגן״ שבהמשך. כשהמקלדת בתוך הנגן של יוטיוב, Escape שייך לו, ו-Tab מוביל אל כפתור הסגירה.
+          </span>
+        </p>
+        <button type="button" class="btn btn--ghost" data-video-close>
+          <Icon name="close" />
+          <span>סגירת הנגן</span>
+        </button>
+      </div>
     </div>
   </dialog>
 </section>
 <script>
-  type Media = { h264: string; vp9: string; poster: string; captions: string; title: string };
+  type Media = { id: string; host: string; title: string; watch: string };
   const dlg = document.getElementById('video-dialog') as HTMLDialogElement | null;
   const opener = document.querySelector<HTMLButtonElement>('[data-video-open]');
   if (dlg && opener) {
     const media: Media = JSON.parse(dlg.dataset.media || '{}');
     const frame = dlg.querySelector<HTMLElement>('[data-video-frame]')!;
     const err = dlg.querySelector<HTMLElement>('[data-video-err]')!;
-    const fsBtn = dlg.querySelector<HTMLButtonElement>('[data-video-fs]')!;
-    let video: HTMLVideoElement | null = null;
-
+    let player: HTMLIFrameElement | null = null;
+    let timer = 0;
+    // a cross-origin player cannot report why it failed, so three things count as "did not load": the browser refused the frame (CSP), the visitor is offline,
+    // or the frame never finished loading. YouTube's own in-player messages (restricted, removed, referrer) stay inside the frame; the link below the player is always visible.
     const fail = () => {
+      window.clearTimeout(timer);
       err.hidden = false;
-      video?.setAttribute('hidden', '');
-      dlg.querySelector<HTMLElement>('[data-video-retry]')?.focus();
+      player?.setAttribute('hidden', '');
+      err.querySelector<HTMLElement>('a')?.focus();
     };
-    // the video element, its sources and its caption track are created only now, after the visitor chose to play
+    const onViolation = (e: SecurityPolicyViolationEvent) => {
+      if (e.violatedDirective.startsWith('frame-src') || e.violatedDirective.startsWith('child-src')) fail();
+    };
     const mount = () => {
       err.hidden = true;
-      video?.remove();
-      const v = document.createElement('video');
-      v.controls = true;
-      v.playsInline = true;
-      v.preload = 'metadata';
-      v.poster = media.poster;
-      v.setAttribute('aria-label', media.title);
-      v.setAttribute('controlslist', 'nodownload');
-      const add = (url: string, type: string) => {
-        const s = document.createElement('source');
-        s.src = url;
-        s.type = type;
-        v.append(s);
-      };
-      add(media.h264, 'video/mp4; codecs="avc1.640028"');
-      add(media.vp9, 'video/webm; codecs="vp9"');
-      if (media.captions) {
-        const t = document.createElement('track');
-        t.kind = 'captions';
-        t.srclang = 'he';
-        t.label = 'עברית';
-        t.src = media.captions;
-        v.append(t);
-      }
-      // an error on the video itself, or on the LAST source (every source failed), means nothing can be played
-      v.addEventListener(
-        'error',
-        (e) => {
-          const t = e.target as HTMLElement;
-          if (t === v || t === v.querySelector('source:last-of-type')) fail();
-        },
-        true,
-      );
-      frame.prepend(v);
-      video = v;
-      // playback starts only because the visitor pressed the poster; the browser decides whether sound is allowed
-      v.play().catch(() => undefined);
-      v.focus({ preventScroll: true });
+      unmount();
+      if (!navigator.onLine) return fail();
+      const f = document.createElement('iframe');
+      const q = new URLSearchParams({ autoplay: '1', rel: '0', playsinline: '1', hl: 'he', origin: location.origin });
+      f.title = media.title;
+      // fullscreen comes from the allowfullscreen attribute (naming it in `allow` as well makes Chromium warn that `allow` takes precedence)
+      f.allow = 'autoplay; encrypted-media; picture-in-picture';
+      f.allowFullscreen = true;
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.addEventListener('load', () => window.clearTimeout(timer));
+      document.addEventListener('securitypolicyviolation', onViolation);
+      frame.prepend(f);
+      player = f;
+      timer = window.setTimeout(fail, Number(dlg.dataset.timeout) || 15000);
+      // the source is set last, after the element is in the page and every listener is attached; the id comes from the page's own data, never from the URL
+      f.src = `${media.host}/embed/${encodeURIComponent(media.id)}?${q.toString()}`;
     };
-    const unmount = () => {
-      if (!video) return;
-      video.pause();
-      video.querySelectorAll('source, track').forEach((n) => n.remove());
-      video.removeAttribute('src');
-      video.load(); // aborts any download in progress
-      video.remove();
-      video = null;
-    };
+    // removing the iframe from the page destroys the player: playback and audio stop at once, and nothing stays connected to YouTube
+    function unmount() {
+      window.clearTimeout(timer);
+      document.removeEventListener('securitypolicyviolation', onViolation);
+      if (!player) return;
+      player.src = 'about:blank';
+      player.remove();
+      player = null;
+    }
 
     opener.addEventListener('click', () => {
       dlg.showModal();
       mount();
     });
-    dlg.querySelector('[data-video-close]')!.addEventListener('click', () => dlg.close());
+    dlg.querySelectorAll('[data-video-close]').forEach((b) => b.addEventListener('click', () => dlg.close()));
     dlg.querySelector('[data-video-retry]')!.addEventListener('click', mount);
     // a click on the dim area (the dialog element itself, outside the panel) closes it, as in the screenshot viewer
     dlg.addEventListener('click', (e) => {
@@ -248,17 +208,6 @@ const media = {
       unmount();
       err.hidden = true;
       opener.focus();
-    });
-    // Escape is handled by the dialog itself (it pauses through close); fullscreen has its own Escape and returns here
-    const canFs = !!(
-      document.fullscreenEnabled || (document.createElement('video') as HTMLVideoElement & { webkitEnterFullscreen?: () => void }).webkitEnterFullscreen
-    );
-    if (canFs) fsBtn.hidden = false;
-    fsBtn.addEventListener('click', () => {
-      if (!video) return;
-      const v = video as HTMLVideoElement & { webkitEnterFullscreen?: () => void };
-      if (v.requestFullscreen) v.requestFullscreen().catch(() => v.webkitEnterFullscreen?.());
-      else v.webkitEnterFullscreen?.();
     });
   }
 </script>
